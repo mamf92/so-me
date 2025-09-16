@@ -1,30 +1,29 @@
-import './style.css';
+import { Router } from './router/Router.ts';
+import { routes } from './router/routes.ts';
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div class="fun-container">
-    <h1>🎨 Random Color Fun!</h1>
-    <p>Click the button to change the background color!</p>
-    <button id="color-btn" type="button">Change Color</button>
-    <p class="read-the-docs">
-      Built with Vite + TypeScript
-    </p>
-  </div>
-`;
+// Get the element where content will be rendered
+const contentElement = document.getElementById('main-content');
 
-// New fun function to change background color
-const changeColor = () => {
-  const colors = [
-    '#FF5733',
-    '#33FF57',
-    '#3357FF',
-    '#F033FF',
-    '#FF33A1',
-    '#33FFF5',
-  ];
-  document.body.style.backgroundColor =
-    colors[Math.floor(Math.random() * colors.length)];
-};
+if (!contentElement) {
+  throw new Error('Element with id "main-content" not found');
+}
 
-document
-  .querySelector<HTMLButtonElement>('#color-btn')!
-  .addEventListener('click', changeColor);
+// Create an instance of our Router
+const router = new Router(routes, contentElement);
+
+// Handle initial page load
+router.resolveRoute();
+
+// Hijack link clicks
+document.querySelectorAll('nav a').forEach((link) => {
+  link.addEventListener('click', (event) => {
+    // Ensure the event has a target before accessing properties
+    if (!(event.target instanceof Element)) return;
+
+    event.preventDefault();
+    const path =
+      (event.target.closest('a') as HTMLAnchorElement)?.getAttribute('href') ||
+      '/';
+    router.navigate(path);
+  });
+});
