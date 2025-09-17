@@ -7,6 +7,7 @@ export class Router {
   private routes: Record<string, () => string>;
   private contentElement: HTMLElement;
 
+  // Initialize with route mappings and the target content element
   constructor(
     routes: Record<string, () => string>,
     contentElement: HTMLElement

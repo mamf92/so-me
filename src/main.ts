@@ -1,29 +1,52 @@
-import { Router } from './router/Router.ts';
-import { routes } from './router/routes.ts';
+import { Router } from './router/Router';
+import { routes } from './router/routes';
+import { Header } from './components/layout/Header';
 
-// Get the element where content will be rendered
-const contentElement = document.getElementById('main-content');
+/**
+ * Main application initialization.
+ * Sets up the header and the router for handling navigation.
+ */
 
-if (!contentElement) {
-  throw new Error('Element with id "main-content" not found');
+export function App() {
+  // Get the elements from your HTML
+  const headerContainer = document.getElementById('header-container');
+  const mainContent = document.getElementById('main-container');
+  // Ensure the elements exist
+  if (!headerContainer || !mainContent) {
+    throw new Error('Required DOM elements not found');
+  }
+  // Render the header
+  headerContainer.innerHTML = '';
+  headerContainer.appendChild(Header());
+
+  // Initialize the router with the main content area
+  const router = new Router(routes, mainContent);
+
+  // Set up navigation event listeners for links
+  setupNavigation(router);
+
+  // Initial route resolution
+  router.resolveRoute();
 }
 
-// Create an instance of our Router
-const router = new Router(routes, contentElement);
+/**
+ * Sets up navigation event listeners for the application.
+ * @param router The Router instance to handle navigation
+ */
 
-// Handle initial page load
-router.resolveRoute();
-
-// Hijack link clicks
-document.querySelectorAll('nav a').forEach((link) => {
-  link.addEventListener('click', (event) => {
-    // Ensure the event has a target before accessing properties
-    if (!(event.target instanceof Element)) return;
-
-    event.preventDefault();
-    const path =
-      (event.target.closest('a') as HTMLAnchorElement)?.getAttribute('href') ||
-      '/';
-    router.navigate(path);
+function setupNavigation(router: Router) {
+  // Handle navigation clicks
+  document.addEventListener('click', (event) => {
+    const target = event.target as HTMLElement;
+    const link = target.closest('a[href]') as HTMLAnchorElement;
+    // Only handle internal links
+    if (link && link.href.startsWith(window.location.origin)) {
+      event.preventDefault();
+      const path = new URL(link.href).pathname;
+      router.navigate(path);
+    }
   });
-});
+}
+
+// Initialize the app when DOM is loaded
+document.addEventListener('DOMContentLoaded', App);

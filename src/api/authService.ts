@@ -1,6 +1,6 @@
 import { post } from './apiClient';
 import type { Media } from './postsService';
-import { showErrorPopup } from '../components/Popups';
+import { showErrorPopup } from '../components/ui/Popups';
 
 export interface LoginData {
   email: string;

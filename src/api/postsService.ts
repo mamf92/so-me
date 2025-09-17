@@ -1,5 +1,5 @@
 import { get, post, put, del } from './apiClient.js';
-import { showErrorPopup } from '../components/Popups.js';
+import { showErrorPopup } from '../components/ui/Popups.js';
 
 /* Media object representing a media item (image, video, etc.) associated with a post. */
 export interface Media {
