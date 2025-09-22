@@ -4,11 +4,12 @@
  */
 
 export class Router {
-  private routes: Record<string, () => string>;
+  private routes: Record<string, () => string | HTMLElement>;
   private contentElement: HTMLElement;
 
+  // Initialize with route mappings and the target content element
   constructor(
-    routes: Record<string, () => string>,
+    routes: Record<string, () => string | HTMLElement>,
     contentElement: HTMLElement
   ) {
     this.routes = routes;
@@ -31,7 +32,16 @@ export class Router {
     const view = this.routes[path] || this.notFoundView;
 
     // Render the view's content into our target element
-    this.contentElement.innerHTML = view();
+    const result = view();
+
+    if (typeof result === 'string') {
+      this.contentElement.innerHTML = result;
+    } else if (result instanceof HTMLElement) {
+      this.contentElement.innerHTML = '';
+      this.contentElement.appendChild(result);
+    } else {
+      this.contentElement.innerHTML = '';
+    }
   }
 
   private notFoundView(): string {
