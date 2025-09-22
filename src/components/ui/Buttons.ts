@@ -1,4 +1,4 @@
-type ButtonSize = 'small' | 'medium' | 'large';
+type ButtonSize = 'xsmall' | 'small' | 'medium' | 'large';
 
 interface ButtonBaseProps {
   label: string;
@@ -16,19 +16,22 @@ interface LinkButtonProps extends ButtonBaseProps {
 }
 
 const SIZE_CLASSES: Record<ButtonSize, string> = {
-  small: 'text-4xl p-2',
-  medium: 'text-4xl px-4 py-3',
-  large: 'text-5xl p-3',
+  xsmall:
+    'text-xs rounded-md md:text-sm p-1 border-none md:border-none lg:border-none',
+  small: 'text-sm md:text-md p-2',
+  medium: 'text-md md:text-lg px-4 py-3',
+  large: 'text-lg md:text-xl p-3',
 };
 
-const BASE = 'font-extrabold rounded-lg outline outline-8 outline-black';
+const BASE =
+  'inline-block font-extrabold rounded-2xl border-6 md:border-8 border-black';
 
 export function buttonClassNames(
   size: ButtonSize = 'medium',
   fill: boolean = false
 ): string {
   const variant = fill
-    ? 'bg-black text-white'
+    ? 'bg-black text-white hover:bg-white hover:text-black'
     : 'bg-white text-black hover:bg-black hover:text-white';
   return `${BASE} ${variant} ${SIZE_CLASSES[size]}`;
 }

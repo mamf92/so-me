@@ -1,6 +1,6 @@
 import { post } from './apiClient';
 import type { Media } from './postsService';
-import { showErrorPopup } from '../components/ui/Popups';
+import { showPopup } from '../components/ui/Popups';
 
 export interface LoginData {
   email: string;
@@ -61,10 +61,11 @@ export async function login(data: LoginData): Promise<LoginResponse> {
     return response;
   } catch (error) {
     console.error(error);
-    showErrorPopup(
-      'Please check your email and password, and try again.',
-      'Login failed.'
-    );
+    showPopup({
+      title: 'Login failed.',
+      message: 'Please check you email and password, and try again.',
+      icon: 'error',
+    });
     throw error;
   }
 }
@@ -79,35 +80,41 @@ export async function login(data: LoginData): Promise<LoginResponse> {
 
 function validateLoginData(data: LoginData): boolean {
   if (!data) {
-    showErrorPopup(
-      'Please check all fields, and try again.',
-      'No data provided.'
-    );
+    showPopup({
+      title: 'No data provided.',
+      message: 'Please check all fields, and try again.',
+      icon: 'error',
+    });
     return false;
   }
 
   if (!data.email || !data.password) {
-    showErrorPopup(
-      'Please check all fields, and try again. ',
-      'All fields are required.'
-    );
+    showPopup({
+      title: 'All fields are required.',
+      message: 'Please check all fields, and try again.',
+      icon: 'error',
+    });
     return false;
   }
   const emailRegex = /^[a-zA-Z0-9._%+-]+@stud\.noroff\.no$/;
   const passwordRegex = /^[a-zA-Z0-9._%+-]{8,}$/;
 
   if (!emailRegex.test(data.email)) {
-    showErrorPopup(
-      'Email must be a valid email address ending with @stud.noroff.no',
-      'Invalid email format.'
-    );
+    showPopup({
+      title: 'Invalid email format.',
+      message:
+        'Email must be a valid email address ending with @stud.noroff.no',
+      icon: 'error',
+    });
     return false;
   }
   if (!passwordRegex.test(data.password)) {
-    showErrorPopup(
-      'Password must be at least 8 characters long and can only contain letters, numbers, and special characters.',
-      'Invalid password.'
-    );
+    showPopup({
+      title: 'Invalid password.',
+      message:
+        'Password must be at least 8 characters long and can only contain letters, numbers, and special characters.',
+      icon: 'error',
+    });
     return false;
   }
   return true;
@@ -124,18 +131,20 @@ function validateLoginData(data: LoginData): boolean {
 
 function validateRegisterData(data: RegisterData): boolean {
   if (!data) {
-    showErrorPopup(
-      'Please check all fields, and try again.',
-      'No data provided.'
-    );
+    showPopup({
+      title: 'No data provided.',
+      message: 'Please check all fields, and try again.',
+      icon: 'error',
+    });
     return false;
   }
 
   if (!data.name || !data.email || !data.password) {
-    showErrorPopup(
-      'Please check all fields, and try again. ',
-      'All fields are required.'
-    );
+    showPopup({
+      title: 'All fields are required.',
+      message: 'Please check all fields, and try again.',
+      icon: 'error',
+    });
     return false;
   }
   const nameRegex = /^[a-zA-ZÀ-ÿ\s-]{3,}$/;
@@ -143,25 +152,31 @@ function validateRegisterData(data: RegisterData): boolean {
   const passwordRegex = /^[a-zA-ZÀ-ÿ0-9#?!@$%^&*-]{8,}$/;
 
   if (!nameRegex.test(data.name)) {
-    showErrorPopup(
-      'Name must be at least 3 characters long and can only contain letters, spaces, and hyphens.',
-      'Invalid name format.'
-    );
+    showPopup({
+      title: 'Invalid name format.',
+      message:
+        'Name must be at least 3 characters long and can only contain letters, spaces, and hyphens.',
+      icon: 'error',
+    });
     return false;
   }
 
   if (!emailRegex.test(data.email)) {
-    showErrorPopup(
-      'Email must be a valid email address ending with @stud.noroff.no',
-      'Invalid email format.'
-    );
+    showPopup({
+      title: 'Invalid email format.',
+      message:
+        'Email must be a valid email address ending with @stud.noroff.no',
+      icon: 'error',
+    });
     return false;
   }
   if (!passwordRegex.test(data.password)) {
-    showErrorPopup(
-      'Password must be at least 8 characters long and can only contain letters, numbers, and special characters.',
-      'Invalid password.'
-    );
+    showPopup({
+      title: 'Invalid password.',
+      message:
+        'Password must be at least 8 characters long and can only contain letters, numbers, and special characters.',
+      icon: 'error',
+    });
     return false;
   }
   return true;

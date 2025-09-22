@@ -4,11 +4,8 @@ interface Props {
   post: Post;
 }
 
-export function PostCard(props: Props) {
-  // We pass the entire post object as a prop for convenience
+export function renderPostCard(props: Props) {
   const { post } = props;
-
-  // It's good practice to handle cases where data might be missing
   if (!post) {
     return '';
   }

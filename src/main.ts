@@ -8,7 +8,7 @@ import { Header } from './components/layout/Header';
  */
 
 export function App() {
-  // Get the elements from your HTML
+  // Get target elements from HTML
   const headerContainer = document.getElementById('header-container');
   const mainContent = document.getElementById('main-container');
   // Ensure the elements exist

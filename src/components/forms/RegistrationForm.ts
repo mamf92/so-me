@@ -1,23 +1,33 @@
 import { TextInput } from './inputs/TextInput';
 import { Button } from '../ui/Buttons';
 
-export function renderLoginForm() {
+export function renderRegistrationForm() {
   const formContainer = document.createElement('div');
   formContainer.className =
-    'flex flex-col w-[90vw] bg-white p-4 py-5 lg:px-8 lg:py-6 rounded-3xl border-8 lg:border-16 border-black lg:max-w-[42.5rem] gap-8';
+    'flex flex-col w-[90vw] bg-white px-4 py-5 lg:px-8 lg:py-6 rounded-3xl border-8 lg:border-16 border-black gap-8 lg:max-w-[42.5rem]';
 
   const formTitle = document.createElement('h1');
-  formTitle.innerText = 'Login';
+  formTitle.innerText = 'Register account';
   formTitle.className = 'text-4xl lg:text-6xl font-extrabold self-center';
 
   const formDescription = document.createElement('p');
   formDescription.innerHTML =
-    'Do you have an account? Register <a href="/register" class="underline">here</a>.';
+    'Already have an account? Login <a href="/login" class="underline">here</a>.';
   formDescription.className = 'text-lg font-body self-center';
 
   const form = document.createElement('form');
-  form.id = 'login-form';
+  form.id = 'register-form';
   form.className = 'flex flex-col gap-8 w-full items-center';
+
+  const nameInput = TextInput({
+    id: 'name',
+    label: 'Name',
+    type: 'text',
+    placeholder: 'Enter your name',
+    required: true,
+    title: 'Enter your full name',
+  });
+  nameInput.classList.add('w-full');
 
   const emailInput = TextInput({
     id: 'email',
@@ -40,10 +50,11 @@ export function renderLoginForm() {
   passwordInput.classList.add('w-full');
 
   const submitButton = Button({
-    label: 'Login',
+    label: 'Register',
     size: 'medium',
   });
 
+  form.appendChild(nameInput);
   form.appendChild(emailInput);
   form.appendChild(passwordInput);
   form.appendChild(submitButton);

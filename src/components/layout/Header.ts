@@ -3,14 +3,15 @@ import { LinkButton } from '../ui/Buttons';
 export function Header(): HTMLElement {
   const headerContent = document.createElement('div');
   headerContent.className =
-    'bg-color-white flex flex-col items-center gap-45 pt-10 pb-45';
+    'bg-white flex flex-col items-center gap-6 pt-10 pb-6';
 
   const top = document.createElement('div');
-  top.className = 'mb-6 w-full flex justify-center';
+  top.className = 'w-full flex justify-center';
 
   const logo = document.createElement('a');
   logo.href = '/';
-  logo.className = 'color-black font-heading text-9xl font-bold flex flex-row';
+  logo.className =
+    'color-black font-heading text-3xl lg:text-6xl font-bold flex flex-row';
   logo.append('So Me');
 
   const exclamation = document.createElement('div');
@@ -27,7 +28,7 @@ export function Header(): HTMLElement {
 
   const nav = document.createElement('nav');
   nav.className =
-    'max-w-[75rem] mb-6 flex w-full justify-around xl:justify-between';
+    'max-w-[64rem] mb-6 flex w-full justify-around xl:justify-between';
 
   const feedLink = LinkButton({
     label: 'Feed',

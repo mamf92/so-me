@@ -1,3 +1,9 @@
-export function loginView() {
-  return `<h1 class="text-3xl font-bold underline">Login Page</h1>`;
+import { renderLoginForm } from '../components/forms/LoginForm';
+
+export function renderLoginPage() {
+  const loginViewContainer = document.createElement('div');
+  loginViewContainer.className =
+    'flex flex-col items-center justify-center w-full';
+  loginViewContainer.appendChild(renderLoginForm());
+  return loginViewContainer;
 }

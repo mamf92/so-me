@@ -1,5 +1,5 @@
 import { get, post, put, del } from './apiClient.js';
-import { showErrorPopup } from '../components/ui/Popups.js';
+import { showPopup } from '../components/ui/Popups.js';
 
 /* Media object representing a media item (image, video, etc.) associated with a post. */
 export interface Media {
@@ -11,10 +11,10 @@ export interface Media {
  */
 export interface Author {
   name: string;
-  email: string;
-  bio: string;
-  avatar: Media;
-  banner: Media;
+  email?: string;
+  bio?: string;
+  avatar?: Media;
+  banner?: Media;
 }
 
 /**
@@ -47,7 +47,7 @@ export interface Post {
       banner: Media;
     };
   }[];
-  _count: { comments: number; likes: number };
+  _count: { comments: number; reactions: number };
 }
 
 /** Pagination metadata for paginated API responses. */
@@ -95,9 +95,17 @@ export async function getPosts(
   } catch (error) {
     console.error('Error fetching posts:', error);
     if (error instanceof Error) {
-      showErrorPopup('Error fetching posts', error.message);
+      showPopup({
+        title: 'Error fetching posts',
+        message: error.message,
+        icon: 'error',
+      });
     } else {
-      showErrorPopup('Error fetching posts', 'An unknown error occurred');
+      showPopup({
+        title: 'Error fetching posts',
+        message: 'An unknown error occurred',
+        icon: 'error',
+      });
     }
     throw error;
   }
