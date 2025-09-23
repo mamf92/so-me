@@ -4,12 +4,18 @@
  */
 
 export class Router {
-  private routes: Record<string, () => string | HTMLElement>;
+  private routes: Record<
+    string,
+    () => string | HTMLElement | Promise<string | HTMLElement>
+  >;
   private contentElement: HTMLElement;
 
   // Initialize with route mappings and the target content element
   constructor(
-    routes: Record<string, () => string | HTMLElement>,
+    routes: Record<
+      string,
+      () => string | HTMLElement | Promise<string | HTMLElement>
+    >,
     contentElement: HTMLElement
   ) {
     this.routes = routes;
@@ -39,6 +45,15 @@ export class Router {
     } else if (result instanceof HTMLElement) {
       this.contentElement.innerHTML = '';
       this.contentElement.appendChild(result);
+    } else if (result instanceof Promise) {
+      result.then((resolved) => {
+        if (typeof resolved === 'string') {
+          this.contentElement.innerHTML = resolved;
+        } else if (resolved instanceof HTMLElement) {
+          this.contentElement.innerHTML = '';
+          this.contentElement.appendChild(resolved);
+        }
+      });
     } else {
       this.contentElement.innerHTML = '';
     }

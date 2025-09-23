@@ -30,14 +30,18 @@ export interface RegisterResponse {
 }
 
 export async function register(data: RegisterData): Promise<LoginResponse> {
+  console.log('From register function: Registering user with data:', data);
   if (!validateRegisterData(data)) {
     throw new Error('Validation failed');
   }
-
+  console.log('Register data validated successfully');
   const response = await post<RegisterResponse>('/auth/register', data);
   if (!response)
     throw new Error('Error registering user: No response data received.');
-
+  console.log(
+    'From register function: User registered successfully:',
+    response
+  );
   return response;
 }
 
@@ -58,14 +62,10 @@ export async function login(data: LoginData): Promise<LoginResponse> {
     }
 
     localStorage.setItem('accessToken', response.data.accessToken);
+    console.log('Access token stored in localStorage');
     return response;
   } catch (error) {
     console.error(error);
-    showPopup({
-      title: 'Login failed.',
-      message: 'Please check you email and password, and try again.',
-      icon: 'error',
-    });
     throw error;
   }
 }
@@ -96,8 +96,9 @@ function validateLoginData(data: LoginData): boolean {
     });
     return false;
   }
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@stud\.noroff\.no$/;
-  const passwordRegex = /^[a-zA-Z0-9._%+-]{8,}$/;
+
+  const emailRegex = /^[a-zA-Z0-9._%+\-]+@stud\.noroff\.no$/;
+  const passwordRegex = /^[a-zA-Z0-9._%+\-]{8,}$/;
 
   if (!emailRegex.test(data.email)) {
     showPopup({
@@ -147,9 +148,9 @@ function validateRegisterData(data: RegisterData): boolean {
     });
     return false;
   }
-  const nameRegex = /^[a-zA-ZÀ-ÿ\s-]{3,}$/;
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@stud\.noroff\.no$/;
-  const passwordRegex = /^[a-zA-ZÀ-ÿ0-9#?!@$%^&*-]{8,}$/;
+  const nameRegex = /^[a-zA-ZÀ-ÿ_]{3,}$/;
+  const emailRegex = /^[a-zA-Z0-9._%+\-]+@stud\.noroff\.no$/;
+  const passwordRegex = /^[a-zA-ZÀ-ÿ0-9#?!@$%^&*\-]{8,}$/;
 
   if (!nameRegex.test(data.name)) {
     showPopup({

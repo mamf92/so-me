@@ -73,6 +73,11 @@ export interface SinglePostResponse {
   meta: Record<string, unknown>;
 }
 
+export interface PaginationProps {
+  page: number;
+  limit: number;
+}
+
 /**
  * Fetches posts from the API with pagination and returns them
  * @param {number} page - The page number to fetch (1-based).
@@ -80,10 +85,10 @@ export interface SinglePostResponse {
  * @returns {Promise<PostsResponse | void>} The posts data or void if an error occurs
  */
 
-export async function getPosts(
-  page: 1,
-  limit: 10
-): Promise<PostsResponse | void> {
+export async function getPosts({
+  page = 1,
+  limit = 10,
+}: PaginationProps): Promise<PostsResponse | void> {
   try {
     const response = await get<PostsResponse>(
       `/social/posts?page=${page}&limit=${limit}`
