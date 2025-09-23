@@ -1,5 +1,33 @@
 import { TextInput } from './inputs/TextInput';
 import { Button } from '../ui/Buttons';
+import { login } from '../../api/authService';
+import { showPopup } from '../ui/Popups';
+
+/**
+ * Handles the login form submission
+ * @param event - The submit event
+ */
+export async function handleLoginFormSubmit(event: Event) {
+  event.preventDefault();
+  const form = event.target as HTMLFormElement;
+  const formData = new FormData(form);
+  const email = formData.get('email') as string;
+  const password = formData.get('password') as string;
+
+  try {
+    const response = await login({ email: email, password: password });
+    console.log('Login successful:', response);
+    if (response && response.data && response.data.accessToken) {
+      window.location.href = '/';
+    }
+  } catch (error) {
+    const errorMessage =
+      (error as Error)?.message +
+        '. Please check your email and password, and try again.' ||
+      'Please check your email and password, and try again.';
+    showPopup({ title: 'Login failed.', message: errorMessage, icon: 'error' });
+  }
+}
 
 export function renderLoginForm() {
   const formContainer = document.createElement('div');
@@ -18,12 +46,15 @@ export function renderLoginForm() {
   const form = document.createElement('form');
   form.id = 'login-form';
   form.className = 'flex flex-col gap-8 w-full items-center';
+  form.addEventListener('submit', handleLoginFormSubmit);
 
   const emailInput = TextInput({
     id: 'email',
+    name: 'email',
     label: 'Email',
     type: 'email',
     placeholder: 'Enter your email',
+    pattern: '^[a-zA-Z0-9._%+\\-]+@stud\\.noroff\\.no$',
     required: true,
     title: 'EmailTitle',
   });
@@ -31,8 +62,10 @@ export function renderLoginForm() {
 
   const passwordInput = TextInput({
     id: 'password',
+    name: 'password',
     label: 'Password',
     type: 'password',
+    pattern: '^.{8,}$',
     placeholder: 'Enter your password',
     required: true,
     title: 'PasswordTitle',

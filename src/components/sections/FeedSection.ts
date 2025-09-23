@@ -4,7 +4,7 @@ import { requestConfirmation } from '../ui/Popups';
 import { LinkButton } from '../ui/Buttons';
 import { Button } from '../ui/Buttons';
 
-export function renderFeedSection(posts: Post[]) {
+export function renderFeedSection(posts: Post[]): HTMLDivElement {
   const feedContainer = document.createElement('div');
   feedContainer.innerHTML = '';
   feedContainer.className = 'flex flex-col gap-4 justify-center align-center';
@@ -79,6 +79,5 @@ export function renderFeedSection(posts: Post[]) {
     const postCard = renderPostCardWithEditActions(post);
     feedContainer.insertAdjacentHTML('beforeend', postCard);
   });
-
   return feedContainer;
 }

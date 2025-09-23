@@ -33,17 +33,17 @@ const ICONS: Record<IconVariants, string> = {
 export function showPopup({ title, message, icon }: PopupProps): HTMLElement {
   const Popup = document.createElement('div');
   Popup.className =
-    'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 outline-16 outline-black rounded-lg z-[1000] flex flex-col items-center justify-center w-[60vw] md:min-w-[21rem] bg-white p-8 gap-6';
+    'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-8 lg:border-16 border-black rounded-2xl z-[1000] flex flex-col items-center justify-center w-[95vw] max-w-[35rem] md:min-w-[21rem] bg-white px-2 lg:px-6 pt-6 pb-2 gap-4';
 
   const PopupContent = document.createElement('div');
   PopupContent.className = 'flex flex-row items-center w-full max-h-[9.375rem]';
 
   const PopupText = document.createElement('div');
   PopupText.className =
-    'flex flex-col w-[calc(100%-9.25rem)] text-black gap-0.5 p-4';
+    'flex flex-col w-[calc(100%-9.25rem)] text-black gap-2 p-4';
 
   const PopupTitle = document.createElement('h2');
-  PopupTitle.className = 'font-heading text-4xl font-extrabold';
+  PopupTitle.className = 'font-heading text-3xl lg:text-4xl font-extrabold';
   PopupTitle.textContent = title;
 
   const PopupMessage = document.createElement('p');
@@ -58,11 +58,11 @@ export function showPopup({ title, message, icon }: PopupProps): HTMLElement {
 
   const PopupActions = document.createElement('div');
   PopupActions.className =
-    'flex flex-row width-full justify-center gap-2 p-6 md:gap-0';
+    'flex flex-row width-full justify-center gap-2 p-2 md:gap-0';
 
   const PopupCloseButton = Button({
     label: 'Close',
-    size: 'small',
+    size: 'medium',
     onClick: () => Popup.remove(),
   });
 

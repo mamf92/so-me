@@ -4,6 +4,7 @@ import { renderRegistrationForm } from '../components/forms/RegistrationForm.ts'
 import { renderPostCreationForm } from '../components/forms/CreatePostForm.ts';
 import { renderMyPostsSection } from '../components/sections/MyPostsSection.ts';
 import { renderFeedSection } from '../components/sections/FeedSection.ts';
+import { showPopup } from '../components/ui/Popups.ts';
 
 const fictivePost = {
   id: 8933,
@@ -41,5 +42,13 @@ export function renderTestPage() {
   container.appendChild(renderMyPostsSection(fictivePosts));
 
   container.appendChild(renderFeedSection(fictivePosts));
+
+  container.appendChild(
+    showPopup({
+      title: 'Login failed.',
+      message: 'This is an error message.',
+      icon: 'error',
+    })
+  );
   return container;
 }

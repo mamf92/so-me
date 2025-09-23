@@ -1,5 +1,6 @@
 interface TextInputProps {
   id: string;
+  name: string;
   label: string;
   type?: 'text' | 'password' | 'email' | 'url';
   placeholder?: string;
@@ -15,11 +16,12 @@ type TitleVariants = 'PasswordTitle' | 'EmailTitle';
 
 const TITLE_VARIANTS: Record<TitleVariants, string> = {
   PasswordTitle: 'Password must be at least 8 characters long',
-  EmailTitle: 'Email must be a @noroff.no address',
+  EmailTitle: 'Email must be a @stud.noroff.no address',
 };
 
 export function TextInput({
   id,
+  name,
   label,
   type,
   placeholder,
@@ -39,6 +41,8 @@ export function TextInput({
   inputLabel.className = 'font-heading text-lg font-bold';
 
   const inputField = document.createElement('input');
+  inputField.id = id;
+  inputField.name = name;
   inputField.type = type ?? '';
   inputField.placeholder = placeholder ?? '';
   inputField.value = value ?? '';
