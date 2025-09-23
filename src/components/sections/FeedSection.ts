@@ -1,13 +1,13 @@
 import type { Post } from '../../api/postsService';
-import { renderPostCardWithEditActions } from '../ui/PostCardWithEditActions';
-import { requestConfirmation } from '../ui/Popups';
-import { LinkButton } from '../ui/Buttons';
+import { renderPostCard } from '../ui/PostCard';
+import { showPopup } from '../ui/Popups';
 import { Button } from '../ui/Buttons';
 
 export function renderFeedSection(posts: Post[]): HTMLDivElement {
   const feedContainer = document.createElement('div');
   feedContainer.innerHTML = '';
-  feedContainer.className = 'flex flex-col gap-4 justify-center align-center';
+  feedContainer.className =
+    'flex flex-col w-full gap-4 justify-center items-center max-w-[calc(100%-2rem)] lg:max-w-[42.5rem]';
   const feedActions = document.createElement('div');
   feedActions.className = 'flex flex-row justify-between items-center w-full';
   feedActions.appendChild(
@@ -46,38 +46,17 @@ export function renderFeedSection(posts: Post[]): HTMLDivElement {
   feedContainer.appendChild(feedActions);
 
   if (posts.length === 0) {
-    try {
-      const confirmed = requestConfirmation({
-        title: 'You have no posts yet.',
-        message: 'Create your first post now!',
-        confirmationLabel: 'Create post',
-        cancellationLabel: 'Later',
-        icon: 'warning',
-      });
-      if (!confirmed) {
-        const noPostsMessage = document.createElement('div');
-        noPostsMessage.className =
-          'flex flex-row justify-center items-center w-full';
-        noPostsMessage.textContent = 'You have not created any posts yet.';
-        const createPostLink = LinkButton({
-          label: 'Create Post',
-          href: '/create-post',
-          size: 'large',
-          fill: false,
-        });
-        feedContainer.appendChild(noPostsMessage);
-        feedContainer.appendChild(createPostLink);
-      } else {
-        window.location.href = '/create-post';
-      }
-    } catch (error) {
-      console.error('Error displaying confirmation popup:', error);
-    }
+    showPopup({
+      title: 'No post created yet',
+      message: 'Be the first one to create a post!',
+      icon: 'warning',
+    });
   }
 
   posts.forEach((post) => {
-    const postCard = renderPostCardWithEditActions(post);
+    const postCard = renderPostCard(post);
     feedContainer.insertAdjacentHTML('beforeend', postCard);
   });
+
   return feedContainer;
 }

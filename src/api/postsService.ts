@@ -25,7 +25,7 @@ export interface Post {
   title: string;
   body: string;
   tags: string[];
-  media: Media;
+  media: Media | null;
   /** ISO 8601 date string representing the date and time when the post was created. */
   created: string;
   /** ISO 8601 date string representing the date and time when the post was last updated. */
@@ -91,7 +91,7 @@ export async function getPosts({
 }: PaginationProps): Promise<PostsResponse | void> {
   try {
     const response = await get<PostsResponse>(
-      `/social/posts?page=${page}&limit=${limit}`
+      `/social/posts?page=${page}&limit=${limit}&_author=true`
     );
     if (!response) {
       throw new Error('Could not get posts.');
