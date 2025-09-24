@@ -25,7 +25,7 @@ export interface Post {
   title: string;
   body: string;
   tags: string[];
-  media: Media;
+  media: Media | null;
   /** ISO 8601 date string representing the date and time when the post was created. */
   created: string;
   /** ISO 8601 date string representing the date and time when the post was last updated. */
@@ -91,7 +91,7 @@ export async function getPosts({
 }: PaginationProps): Promise<PostsResponse | void> {
   try {
     const response = await get<PostsResponse>(
-      `/social/posts?page=${page}&limit=${limit}`
+      `/social/posts?page=${page}&limit=${limit}&_author=true`
     );
     if (!response) {
       throw new Error('Could not get posts.');
@@ -99,19 +99,6 @@ export async function getPosts({
     return response;
   } catch (error) {
     console.error('Error fetching posts:', error);
-    if (error instanceof Error) {
-      showPopup({
-        title: 'Error fetching posts',
-        message: error.message,
-        icon: 'error',
-      });
-    } else {
-      showPopup({
-        title: 'Error fetching posts',
-        message: 'An unknown error occurred',
-        icon: 'error',
-      });
-    }
     throw error;
   }
 }
@@ -120,8 +107,22 @@ export async function getPostById() {
   //TODO
 }
 
-export async function getPostsFromFollowedUsers() {
-  //TODO
+export async function getPostsFromFollowedUsers({
+  page = 1,
+  limit = 10,
+}: PaginationProps): Promise<PostsResponse | void> {
+  try {
+    const response = await get<PostsResponse>(
+      `/social/posts/following?page=${page}&limit=${limit}&_author=true`
+    );
+    if (!response) {
+      throw new Error('Error fetching posts from followed users.');
+    }
+    return response;
+  } catch (error) {
+    console.error('Error fetching posts from followed users:', error);
+    throw error;
+  }
 }
 
 export async function searchPosts(query: string): Promise<PostsResponse> {

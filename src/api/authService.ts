@@ -38,10 +38,6 @@ export async function register(data: RegisterData): Promise<LoginResponse> {
   const response = await post<RegisterResponse>('/auth/register', data);
   if (!response)
     throw new Error('Error registering user: No response data received.');
-  console.log(
-    'From register function: User registered successfully:',
-    response
-  );
   return response;
 }
 

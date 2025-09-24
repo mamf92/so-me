@@ -19,8 +19,8 @@ const SIZE_CLASSES: Record<ButtonSize, string> = {
   xsmall:
     'text-xs rounded-md md:text-sm p-1 border-none md:border-none lg:border-none',
   small: 'text-sm md:text-md p-2',
-  medium: 'text-md md:text-lg px-4 py-3',
-  large: 'text-lg md:text-xl p-3',
+  medium: 'text-md md:text-lg p-3',
+  large: 'text-lg md:text-xl p-4',
 };
 
 const BASE =

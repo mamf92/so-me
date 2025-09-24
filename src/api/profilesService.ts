@@ -1,3 +1,24 @@
+import type { Media, PaginationMeta } from './postsService';
+
+export interface Profile {
+  name: string;
+  email: string;
+  bio: string;
+  banner: Media;
+  avatar: Media;
+  _count: { posts: number; followers: number; following: number };
+}
+
+export interface ProfileResponse {
+  data: Profile;
+  meta: Record<string, unknown>;
+}
+
+export interface ProfilesResponse {
+  data: Profile[];
+  meta: PaginationMeta;
+}
+
 export async function getProfiles(): Promise<ProfilesResponse> {
   //TODO
 }

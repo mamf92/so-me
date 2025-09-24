@@ -20,11 +20,15 @@ export function renderPostCardWithEditActions(post: Post): string {
     >
       <div class="flex flex-col sm:items-center sm:flex-row rounded-2xl overflow-hidden border-8 border-black">
         <div class="flex sm:max-w-[calc(20%-1rem)] shrink-0">
-          <img
+          ${
+            post.media
+              ? `<img
             src="${post.media.url}"
             alt="${post.media.alt || post.title}"
             class="flex h-full object-cover"
-          />
+          />`
+              : ''
+          }
         </div>
         <div class="flex flex-col w-full gap-2 px-2 py-1 justify-center">
           <div class="flex flex-row w-full justify-between">
@@ -44,7 +48,7 @@ export function renderPostCardWithEditActions(post: Post): string {
             </div>
           </div>
           <h3 class="font-extrabold text-sm text-left">${post.title}</h3>
-          <p>${post.body}</p>
+          <p class="font-body text-xs">${post.body}</p>
           <div class="flex flex-row gap-4 items-center">
             <div class="flex flex-row text-xs text-black underline gap-2">
               ${Array.isArray(post.tags) ? post.tags.map((tag) => `<span>#${tag}</span>`).join('') : ''}

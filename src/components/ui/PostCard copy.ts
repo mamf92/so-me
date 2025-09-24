@@ -1,14 +1,12 @@
 import type { Post } from '../../api/postsService';
 
-export function renderPostCard(post: Post): HTMLElement {
+export function renderPostCard(post: Post) {
   if (!post) {
-    console.error('No post data provided to renderPostCard.');
-
-    return document.createElement('div');
+    return '';
   }
   const postCard = document.createElement('article');
   postCard.className =
-    'post-card flex flex-col justify-center items-center lg:flex-row w-full lg:max-h-[10rem] rounded-2xl border-8 border-black overflow-hidden hover:cursor-pointer';
+    'post-card flex flex-col justify-center items-center lg:flex-row w-full lg:max-h-[10rem] rounded-2xl border-8 border-black overflow-hidden';
   const media = document.createElement('div');
   media.className =
     'flex lg:h-40 lg:w-[calc(20%-1rem)] shrink-0 overflow-hidden';
