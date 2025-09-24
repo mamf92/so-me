@@ -6,14 +6,18 @@ import { renderProfilePage } from '../pages/ProfilePage';
 import { renderEditPostpage } from '../pages/EditPostPage';
 import { renderPostPage } from '../pages/PostPage';
 import { renderTestPage } from '../pages/TestPage';
+import { renderHomePageWithFollowingFeed } from '../pages/HomePageFollowing';
+import { renderCreatePostPage } from '../pages/CreatePostPage';
 
 export const routes = {
   '/': renderHomePage,
+  '/followingfeed': renderHomePageWithFollowingFeed,
   '/explore': renderExplorePage,
   '/post': renderPostPage,
   '/login': renderLoginPage,
   '/register': renderRegistrationPage,
   '/profile': renderProfilePage,
+  '/create': renderCreatePostPage,
   '/edit': renderEditPostpage,
   '/test': renderTestPage,
 };

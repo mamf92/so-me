@@ -99,19 +99,6 @@ export async function getPosts({
     return response;
   } catch (error) {
     console.error('Error fetching posts:', error);
-    if (error instanceof Error) {
-      showPopup({
-        title: 'Error fetching posts',
-        message: error.message,
-        icon: 'error',
-      });
-    } else {
-      showPopup({
-        title: 'Error fetching posts',
-        message: 'An unknown error occurred',
-        icon: 'error',
-      });
-    }
     throw error;
   }
 }
@@ -120,8 +107,22 @@ export async function getPostById() {
   //TODO
 }
 
-export async function getPostsFromFollowedUsers() {
-  //TODO
+export async function getPostsFromFollowedUsers({
+  page = 1,
+  limit = 10,
+}: PaginationProps): Promise<PostsResponse | void> {
+  try {
+    const response = await get<PostsResponse>(
+      `/social/posts/following?page=${page}&limit=${limit}&_author=true`
+    );
+    if (!response) {
+      throw new Error('Error fetching posts from followed users.');
+    }
+    return response;
+  } catch (error) {
+    console.error('Error fetching posts from followed users:', error);
+    throw error;
+  }
 }
 
 export async function searchPosts(query: string): Promise<PostsResponse> {

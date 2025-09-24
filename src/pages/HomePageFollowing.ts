@@ -6,25 +6,6 @@ import { showPopup } from '../components/ui/Popups';
 import type { PaginationProps } from '../api/postsService';
 import type { PostsResponse } from '../api/postsService';
 
-async function getPostsForFeed({
-  page = 1,
-  limit = 10,
-}: PaginationProps): Promise<PostsResponse | void> {
-  try {
-    const postsPromise = getPosts({ page, limit });
-    const posts = await postsPromise;
-    return posts;
-  } catch (error) {
-    if (error instanceof Error) {
-      showPopup({
-        title: 'Error fetching posts for feed.',
-        message: error.message,
-        icon: 'error',
-      });
-    }
-  }
-}
-
 async function getFollowedPostsForFollowingFeed({
   page = 1,
   limit = 10,
@@ -44,7 +25,7 @@ async function getFollowedPostsForFollowingFeed({
   }
 }
 
-export async function renderHomePage() {
+export async function renderHomePageWithFollowingFeed() {
   const isLoggedIn = isAuthenticated();
   if (!isLoggedIn) {
     showPopup({
@@ -64,11 +45,14 @@ export async function renderHomePage() {
 
   showPageSpinner();
   try {
-    const posts = await getPostsForFeed({ page: 1, limit: 10 });
+    const posts = await getFollowedPostsForFollowingFeed({
+      page: 1,
+      limit: 10,
+    });
     if (posts && posts.data) {
       const feedSection = renderFeedSection({
         posts: posts.data,
-        currentPage: 'newest',
+        currentPage: 'following',
       });
       container.appendChild(feedSection);
     }
