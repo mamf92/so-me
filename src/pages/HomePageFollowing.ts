@@ -1,5 +1,5 @@
 import { isAuthenticated } from '../api/authService';
-import { getPosts, getPostsFromFollowedUsers } from '../api/postsService';
+import { getPostsFromFollowedUsers } from '../api/postsService';
 import { renderFeedSection } from '../components/sections/FeedSection';
 import { showPageSpinner, hidePageSpinner } from '../components/ui/Spinners';
 import { showPopup } from '../components/ui/Popups';

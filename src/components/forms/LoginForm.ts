@@ -16,7 +16,6 @@ export async function handleLoginFormSubmit(event: Event) {
 
   try {
     const response = await login({ email: email, password: password });
-    console.log('Login successful:', response);
     if (response && response.data && response.data.accessToken) {
       window.location.href = '/';
     }

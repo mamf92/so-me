@@ -49,7 +49,6 @@ export function renderFeedSection({
       fill: false,
       onClick: () => {
         window.location.href = '/create';
-        console.log('');
       },
     })
   );

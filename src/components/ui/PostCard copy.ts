@@ -1,8 +1,8 @@
 import type { Post } from '../../api/postsService';
 
-export function renderPostCard(post: Post) {
+export function renderPostCard(post: Post): HTMLElement {
   if (!post) {
-    return '';
+    return document.createElement('div');
   }
   const postCard = document.createElement('article');
   postCard.className =

@@ -1,4 +1,5 @@
-import type { Media, PaginationMeta } from './postsService';
+import { get } from './apiClient';
+import type { Media, PaginationMeta, PostsResponse } from './postsService';
 
 export interface Profile {
   name: string;
@@ -19,6 +20,12 @@ export interface ProfilesResponse {
   meta: PaginationMeta;
 }
 
+export interface PostsByProfileProps {
+  name: string;
+  page?: number;
+  limit?: number;
+}
+
 export async function getProfiles(): Promise<ProfilesResponse> {
   //TODO
 }
@@ -27,10 +34,23 @@ export async function getProfileByName(name: string): Promise<ProfileResponse> {
   //TODO
 }
 
-export async function getAllPostsByProfile(
-  name: string
+export async function getPostsByProfile(
+  props: PostsByProfileProps
 ): Promise<PostsResponse> {
-  //TODO
+  try {
+    const response = await get<PostsResponse>(
+      `/social/profiles/${props.name}/posts?page=${props.page || 1}&limit=${
+        props.limit || 10
+      }&_author=true`
+    );
+    if (!response) {
+      throw new Error('Could not fetch posts by profile.');
+    }
+    return response;
+  } catch (error) {
+    console.error('Error fetching posts by profile:', error);
+    throw error;
+  }
 }
 
 export async function updateProfile(

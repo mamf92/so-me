@@ -8,7 +8,7 @@ interface ApiOptions {
   headers?: Record<string, string>;
 }
 
-interface ApiError {
+export interface ApiError {
   /** Array of error objects. */
   errors?: {
     /** Optional error code */

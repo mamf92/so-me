@@ -1,5 +1,5 @@
 import { isAuthenticated } from '../api/authService';
-import { getPosts, getPostsFromFollowedUsers } from '../api/postsService';
+import { getPosts } from '../api/postsService';
 import { renderFeedSection } from '../components/sections/FeedSection';
 import { showPageSpinner, hidePageSpinner } from '../components/ui/Spinners';
 import { showPopup } from '../components/ui/Popups';
@@ -18,25 +18,6 @@ async function getPostsForFeed({
     if (error instanceof Error) {
       showPopup({
         title: 'Error fetching posts for feed.',
-        message: error.message,
-        icon: 'error',
-      });
-    }
-  }
-}
-
-async function getFollowedPostsForFollowingFeed({
-  page = 1,
-  limit = 10,
-}: PaginationProps): Promise<PostsResponse | void> {
-  try {
-    const postsPromise = getPostsFromFollowedUsers({ page, limit });
-    const posts = await postsPromise;
-    return posts;
-  } catch (error) {
-    if (error instanceof Error) {
-      showPopup({
-        title: 'Error fetching followed posts for feed.',
         message: error.message,
         icon: 'error',
       });

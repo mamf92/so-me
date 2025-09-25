@@ -58,7 +58,7 @@ export async function login(data: LoginData): Promise<LoginResponse> {
     }
 
     localStorage.setItem('accessToken', response.data.accessToken);
-    console.log('Access token stored in localStorage');
+    localStorage.setItem('userName', response.data.name);
     return response;
   } catch (error) {
     console.error(error);
