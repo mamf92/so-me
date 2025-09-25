@@ -30,11 +30,9 @@ export interface RegisterResponse {
 }
 
 export async function register(data: RegisterData): Promise<LoginResponse> {
-  console.log('From register function: Registering user with data:', data);
   if (!validateRegisterData(data)) {
     throw new Error('Validation failed');
   }
-  console.log('Register data validated successfully');
   const response = await post<RegisterResponse>('/auth/register', data);
   if (!response)
     throw new Error('Error registering user: No response data received.');

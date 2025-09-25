@@ -1,6 +1,7 @@
 import { Router } from './router/Router';
 import { routes } from './router/routes';
 import { Header } from './components/layout/Header';
+import type { HeaderProps } from './components/layout/Header';
 
 /**
  * Main application initialization.
@@ -15,18 +16,38 @@ export function App() {
   if (!headerContainer || !mainContent) {
     throw new Error('Required DOM elements not found');
   }
+
+  const currentPage = checkCurrentPage(window.location.pathname);
+
   // Render the header
   headerContainer.innerHTML = '';
-  headerContainer.appendChild(Header());
+  headerContainer.appendChild(Header(currentPage));
 
   // Initialize the router with the main content area
-  const router = new Router(routes, mainContent);
+  const router = new Router(routes, mainContent, (path) => {
+    const newPage = checkCurrentPage(path);
+    headerContainer.innerHTML = '';
+    headerContainer.appendChild(Header(newPage));
+  });
 
   // Set up navigation event listeners for links
   setupNavigation(router);
 
   // Initial route resolution
   router.resolveRoute();
+}
+
+function checkCurrentPage(pathname: string): HeaderProps {
+  switch (pathname) {
+    case '/':
+      return 'feed';
+    case '/profile':
+      return 'profile';
+    case '/explore':
+      return 'explore';
+    default:
+      return null;
+  }
 }
 
 /**
@@ -42,8 +63,9 @@ function setupNavigation(router: Router) {
     // Only handle internal links
     if (link && link.href.startsWith(window.location.origin)) {
       event.preventDefault();
-      const path = new URL(link.href).pathname;
-      router.navigate(path);
+      const url = new URL(link.href);
+      const pathWithSearch = url.pathname + url.search;
+      router.navigate(pathWithSearch);
     }
   });
 }

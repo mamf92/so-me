@@ -117,7 +117,7 @@ export function renderMyPostsSection({
   if (currentPage === 'newest') {
     posts.forEach((post) => {
       const postCard = renderPostCardWithEditActions(post);
-      myPostsContainer.insertAdjacentHTML('beforeend', postCard);
+      myPostsContainer.appendChild(postCard);
     });
   }
   if (currentPage === 'following' && posts.length > 0) {

@@ -81,9 +81,9 @@ export function renderPostCard(post: Post): HTMLElement {
   tagsContainer.className = 'flex flex-row text-sm text-black underline gap-2';
   if (Array.isArray(post.tags)) {
     post.tags.forEach((tag) => {
-      const tagSpan = document.createElement('span');
-      tagSpan.textContent = `#${tag}`;
-      tagsContainer.appendChild(tagSpan);
+      const tagList = document.createElement('span');
+      tagList.textContent = `#${tag}`;
+      tagsContainer.appendChild(tagList);
     });
   }
   footer.appendChild(tagsContainer);

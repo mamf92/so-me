@@ -1,6 +1,8 @@
 import { LinkButton } from '../ui/Buttons';
 
-export function Header(): HTMLElement {
+export type HeaderProps = 'feed' | 'profile' | 'explore' | null;
+
+export function Header(currentPage: HeaderProps): HTMLElement {
   const headerContent = document.createElement('div');
   headerContent.className =
     'bg-white flex flex-col items-center gap-6 pt-10 pb-6';
@@ -34,19 +36,19 @@ export function Header(): HTMLElement {
     label: 'Feed',
     href: '/',
     size: 'large',
-    fill: true,
+    fill: currentPage === 'feed',
   });
   const profileLink = LinkButton({
     label: 'Profile',
     href: '/profile',
     size: 'large',
-    fill: false,
+    fill: currentPage === 'profile',
   });
   const exploreLink = LinkButton({
     label: 'Explore',
     href: '/explore',
     size: 'large',
-    fill: false,
+    fill: currentPage === 'explore',
   });
 
   nav.appendChild(feedLink);

@@ -9,6 +9,7 @@ export class Router {
     () => string | HTMLElement | Promise<string | HTMLElement>
   >;
   private contentElement: HTMLElement;
+  private onRouteChange?: (path: string) => void;
 
   // Initialize with route mappings and the target content element
   constructor(
@@ -16,10 +17,12 @@ export class Router {
       string,
       () => string | HTMLElement | Promise<string | HTMLElement>
     >,
-    contentElement: HTMLElement
+    contentElement: HTMLElement,
+    onRouteChange?: (path: string) => void
   ) {
     this.routes = routes;
     this.contentElement = contentElement;
+    this.onRouteChange = onRouteChange;
 
     // Listen for back/forward navigation
     window.addEventListener('popstate', () => this.resolveRoute());
@@ -34,6 +37,11 @@ export class Router {
   // Find the correct view and render it
   resolveRoute(): void {
     const path = window.location.pathname;
+
+    // Notify about route change
+    if (this.onRouteChange) {
+      this.onRouteChange(path);
+    }
     // Find the view function for the current path, or use the 404 view
     const view = this.routes[path] || this.notFoundView;
 
