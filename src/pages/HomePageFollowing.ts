@@ -1,10 +1,13 @@
 import { isAuthenticated } from '../api/authService';
-import { getPostsFromFollowedUsers } from '../api/postsService';
+import {
+  getPostsFromFollowedUsers,
+  type PaginationProps,
+  type PostsResponse,
+} from '../api/postsService';
+import { getFollowingNames } from '../api/profilesService';
 import { renderFeedSection } from '../components/sections/FeedSection';
 import { showPageSpinner, hidePageSpinner } from '../components/ui/Spinners';
 import { showPopup } from '../components/ui/Popups';
-import type { PaginationProps } from '../api/postsService';
-import type { PostsResponse } from '../api/postsService';
 
 async function getFollowedPostsForFollowingFeed({
   page = 1,
@@ -45,14 +48,18 @@ export async function renderHomePageWithFollowingFeed() {
 
   showPageSpinner();
   try {
-    const posts = await getFollowedPostsForFollowingFeed({
-      page: 1,
-      limit: 10,
-    });
+    const [posts, followingNames] = await Promise.all([
+      getFollowedPostsForFollowingFeed({
+        page: 1,
+        limit: 10,
+      }),
+      getFollowingNames(localStorage.getItem('userName') || ''),
+    ]);
     if (posts && posts.data) {
       const feedSection = renderFeedSection({
         posts: posts.data,
         currentPage: 'following',
+        followingNames: followingNames || new Set<string>(),
       });
       container.appendChild(feedSection);
     }

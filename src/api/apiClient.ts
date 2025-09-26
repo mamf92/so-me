@@ -99,7 +99,7 @@ export const post = <T = unknown>(endpoint: string, body: unknown) =>
  * @param body The data to update the resource.
  * @returns The API response data or null.
  */
-export const put = <T = unknown>(endpoint: string, body: unknown) =>
+export const put = <T = unknown>(endpoint: string, body?: unknown) =>
   apiClient<T>(endpoint, { method: 'PUT', body });
 
 /**

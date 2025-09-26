@@ -8,11 +8,13 @@ type CurrentFeed = 'newest' | 'following';
 export interface FeedSectionProps {
   posts: Post[];
   currentPage: CurrentFeed;
+  followingNames: Set<string>;
 }
 
 export function renderFeedSection({
   posts,
   currentPage,
+  followingNames,
 }: FeedSectionProps): HTMLElement {
   const feedContainer = document.createElement('section');
   feedContainer.innerHTML = '';
@@ -27,7 +29,6 @@ export function renderFeedSection({
       fill: currentPage === 'newest',
       onClick: () => {
         window.location.href = '/';
-        console.log('Show Newest');
       },
     })
   );
@@ -38,7 +39,6 @@ export function renderFeedSection({
       fill: currentPage === 'following',
       onClick: () => {
         window.location.href = '/followingfeed';
-        console.log('Show Following');
       },
     })
   );
@@ -76,11 +76,12 @@ export function renderFeedSection({
     return feedContainer;
   }
 
+  const followingSet = followingNames || new Set<string>();
+
   posts.forEach((post) => {
-    const postCard = renderPostCard(post);
-    postCard.addEventListener('click', () => {
-      window.location.href = `/post?id=${post.id}`;
-    });
+    const authorName = post.author?.name || '';
+    const isFollowing = authorName !== '' && followingSet.has(authorName);
+    const postCard = renderPostCard(post, isFollowing);
     feedContainer.appendChild(postCard);
   });
 

@@ -5,6 +5,7 @@ import { showPageSpinner, hidePageSpinner } from '../components/ui/Spinners';
 import { showPopup } from '../components/ui/Popups';
 import type { PaginationProps } from '../api/postsService';
 import type { PostsResponse } from '../api/postsService';
+import { getFollowingNames } from '../api/profilesService';
 
 async function getPostsForFeed({
   page = 1,
@@ -45,11 +46,16 @@ export async function renderHomePage() {
 
   showPageSpinner();
   try {
-    const posts = await getPostsForFeed({ page: 1, limit: 10 });
+    const [posts, followingNames] = await Promise.all([
+      getPostsForFeed({ page: 1, limit: 10 }),
+      getFollowingNames(localStorage.getItem('userName') || ''),
+    ]);
     if (posts && posts.data) {
+      console.log('Following names in HomePage:', followingNames);
       const feedSection = renderFeedSection({
         posts: posts.data,
         currentPage: 'newest',
+        followingNames: followingNames || new Set<string>(),
       });
       container.appendChild(feedSection);
     }

@@ -10,12 +10,15 @@ interface MyPostsSectionProps {
   posts: Post[];
   currentPage: CurrentFeed;
   onChangeFeed: (feed: CurrentFeed) => void;
+  followingNames?: Set<string>;
+  onFollowToggle?: (authorName: string, isFollowing: boolean) => void;
 }
 
 export function renderMyPostsSection({
   posts,
   currentPage,
   onChangeFeed,
+  followingNames,
 }: MyPostsSectionProps): HTMLElement {
   const myPostsContainer = document.createElement('div');
   myPostsContainer.innerHTML = '';
@@ -122,7 +125,9 @@ export function renderMyPostsSection({
   }
   if (currentPage === 'following' && posts.length > 0) {
     posts.forEach((post) => {
-      const postCard = renderPostCard(post);
+      const authorName = post.author?.name || '';
+      const isFollowing = authorName !== '' && followingNames?.has(authorName);
+      const postCard = renderPostCard(post, isFollowing);
       myPostsContainer.appendChild(postCard);
     });
     return myPostsContainer;

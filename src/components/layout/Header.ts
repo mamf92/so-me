@@ -40,7 +40,7 @@ export function Header(currentPage: HeaderProps): HTMLElement {
   });
   const profileLink = LinkButton({
     label: 'Profile',
-    href: '/profile',
+    href: '/myprofile',
     size: 'large',
     fill: currentPage === 'profile',
   });
