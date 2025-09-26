@@ -63,5 +63,6 @@ export function LinkButton({
   if (id) link.id = id;
   link.textContent = label;
   link.href = href;
+  console.log(href);
   return link;
 }

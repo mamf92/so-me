@@ -1,4 +1,13 @@
-import type { Media, PaginationMeta } from './postsService';
+import { get, put } from './apiClient';
+import type { Media, PaginationMeta, PostsResponse } from './postsService';
+
+export interface ShortProfile {
+  name: string;
+  email: string;
+  bio: string;
+  banner: Media;
+  avatar: Media;
+}
 
 export interface Profile {
   name: string;
@@ -19,6 +28,30 @@ export interface ProfilesResponse {
   meta: PaginationMeta;
 }
 
+export interface PostsByProfileProps {
+  name: string;
+  page?: number;
+  limit?: number;
+}
+
+export interface FollowingResponse {
+  data: {
+    followers: ShortProfile[];
+    following: ShortProfile[];
+  };
+  meta: Record<string, unknown>;
+}
+
+export interface ProfileWithRelations extends Profile {
+  followers?: ShortProfile[];
+  following?: ShortProfile[];
+}
+
+export interface ProfileWithRelationsResponse {
+  data: ProfileWithRelations;
+  meta: Record<string, unknown>;
+}
+
 export async function getProfiles(): Promise<ProfilesResponse> {
   //TODO
 }
@@ -27,10 +60,23 @@ export async function getProfileByName(name: string): Promise<ProfileResponse> {
   //TODO
 }
 
-export async function getAllPostsByProfile(
-  name: string
+export async function getPostsByProfile(
+  props: PostsByProfileProps
 ): Promise<PostsResponse> {
-  //TODO
+  try {
+    const response = await get<PostsResponse>(
+      `/social/profiles/${props.name}/posts?page=${props.page || 1}&limit=${
+        props.limit || 10
+      }&_author=true`
+    );
+    if (!response) {
+      throw new Error('Could not fetch posts by profile.');
+    }
+    return response;
+  } catch (error) {
+    console.error('Error fetching posts by profile:', error);
+    throw error;
+  }
 }
 
 export async function updateProfile(
@@ -40,12 +86,55 @@ export async function updateProfile(
   //TODO
 }
 
-export async function followProfile(name: string): Promise<void> {
-  //TODO
+export async function followProfile(name: string): Promise<FollowingResponse> {
+  try {
+    const response = await put<FollowingResponse>(
+      `/social/profiles/${name}/follow`
+    );
+    if (!response) {
+      throw new Error('Could not follow profile.');
+    }
+    return response;
+  } catch (error) {
+    console.error('Error following profile:', error);
+    throw error;
+  }
 }
 
-export async function unfollowProfile(name: string): Promise<void> {
-  //TODO
+export async function unfollowProfile(
+  name: string
+): Promise<FollowingResponse> {
+  try {
+    const response = await put<FollowingResponse>(
+      `/social/profiles/${name}/unfollow`
+    );
+    if (!response) {
+      throw new Error('Could not unfollow profile.');
+    }
+    return response;
+  } catch (error) {
+    console.error('Error fetching posts by profile:', error);
+    throw error;
+  }
+}
+
+export async function getFollowingNames(me: string): Promise<Set<string>> {
+  try {
+    const response = await get<ProfileWithRelationsResponse>(
+      `/social/profiles/${me}?_following=true`
+    );
+    console.log('Fetched following names:', response);
+    if (!response || !response.data) {
+      throw new Error('Could not fetch following names.');
+    }
+
+    const names = response.data.following?.map((profile) => profile.name) || [];
+    console.log('Following names:', names);
+    return new Set(names);
+  } catch (error) {
+    console.error('Error fetching following names:', error);
+    throw error;
+  }
 }
 
 export async function searchProfiles(query: string): Promise<ProfilesResponse> {

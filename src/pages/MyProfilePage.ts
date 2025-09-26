@@ -1,7 +1,7 @@
 import { isAuthenticated } from '../api/authService';
 import { getPostsFromFollowedUsers } from '../api/postsService';
-import type { PostsResponse, PaginationProps } from '../api/postsService';
-import { getPostsByProfile } from '../api/profilesService';
+import type { PostsResponse, PaginationProps, Post } from '../api/postsService';
+import { getPostsByProfile, getFollowingNames } from '../api/profilesService';
 import type { PostsByProfileProps } from '../api/profilesService';
 import { renderMyPostsSection } from '../components/sections/MyPostsSection';
 import type { CurrentFeed } from '../components/sections/MyPostsSection';
@@ -47,7 +47,7 @@ async function getFollowedPostsForFollowingFeed({
   }
 }
 
-export async function renderProfilePage() {
+export async function renderMyProfilePage() {
   const isLoggedIn = isAuthenticated();
   if (!isLoggedIn) {
     showPopup({
@@ -81,15 +81,25 @@ export async function renderProfilePage() {
   container.className =
     'flex flex-col items-center justify-center gap-8 mb-[10rem]';
 
-  async function fetchPosts(feed: CurrentFeed) {
+  async function fetchPosts(
+    feed: CurrentFeed
+  ): Promise<{ posts: Post[]; followingNames?: Set<string> }> {
     if (feed === 'newest') {
-      return await getPostsForProfileFeed({
+      const response = await getPostsForProfileFeed({
         name: checkedUserName,
         page: 1,
         limit: 10,
       });
+      return {
+        posts: response?.data || [],
+        followingNames: new Set<string>(),
+      };
     } else {
-      return await getFollowedPostsForFollowingFeed({ page: 1, limit: 10 });
+      const [postsResponse, followingNames] = await Promise.all([
+        getFollowedPostsForFollowingFeed({ page: 1, limit: 10 }),
+        getFollowingNames(checkedUserName),
+      ]);
+      return { posts: postsResponse?.data || [], followingNames };
     }
   }
 
@@ -97,20 +107,19 @@ export async function renderProfilePage() {
     showPageSpinner();
     currentFeed = feed;
     try {
-      const posts = await fetchPosts(feed);
-      if (posts && posts.data) {
-        const feedSection = renderMyPostsSection({
-          posts: posts.data,
-          currentPage: currentFeed,
-          onChangeFeed: (next) => {
-            if (next !== currentFeed) {
-              renderProfileFeedSection(next);
-            }
-          },
-        });
-        container.innerHTML = '';
-        container.appendChild(feedSection);
-      }
+      const { posts, followingNames } = await fetchPosts(feed);
+      const feedSection = renderMyPostsSection({
+        posts: posts,
+        currentPage: currentFeed,
+        onChangeFeed: (next) => {
+          if (next !== currentFeed) {
+            renderProfileFeedSection(next);
+          }
+        },
+        followingNames: followingNames,
+      });
+      container.innerHTML = '';
+      container.appendChild(feedSection);
     } catch (error) {
       if (error instanceof Error) {
         showPopup({

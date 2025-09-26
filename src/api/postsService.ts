@@ -140,5 +140,21 @@ export async function updatePost(
   //TODO
 }
 export async function deletePost(id: number): Promise<void> {
-  //TODO
+  try {
+    await del(`/social/posts/${id}`);
+    showPopup({
+      title: 'Post deleted',
+      message: 'The post has been successfully deleted.',
+      icon: 'success',
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      showPopup({
+        title: 'Error deleting post.',
+        message: error.message,
+        icon: 'error',
+      });
+    }
+    throw error;
+  }
 }

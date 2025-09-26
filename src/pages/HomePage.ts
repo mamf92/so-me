@@ -1,10 +1,11 @@
 import { isAuthenticated } from '../api/authService';
-import { getPosts, getPostsFromFollowedUsers } from '../api/postsService';
+import { getPosts } from '../api/postsService';
 import { renderFeedSection } from '../components/sections/FeedSection';
 import { showPageSpinner, hidePageSpinner } from '../components/ui/Spinners';
 import { showPopup } from '../components/ui/Popups';
 import type { PaginationProps } from '../api/postsService';
 import type { PostsResponse } from '../api/postsService';
+import { getFollowingNames } from '../api/profilesService';
 
 async function getPostsForFeed({
   page = 1,
@@ -18,25 +19,6 @@ async function getPostsForFeed({
     if (error instanceof Error) {
       showPopup({
         title: 'Error fetching posts for feed.',
-        message: error.message,
-        icon: 'error',
-      });
-    }
-  }
-}
-
-async function getFollowedPostsForFollowingFeed({
-  page = 1,
-  limit = 10,
-}: PaginationProps): Promise<PostsResponse | void> {
-  try {
-    const postsPromise = getPostsFromFollowedUsers({ page, limit });
-    const posts = await postsPromise;
-    return posts;
-  } catch (error) {
-    if (error instanceof Error) {
-      showPopup({
-        title: 'Error fetching followed posts for feed.',
         message: error.message,
         icon: 'error',
       });
@@ -64,11 +46,16 @@ export async function renderHomePage() {
 
   showPageSpinner();
   try {
-    const posts = await getPostsForFeed({ page: 1, limit: 10 });
+    const [posts, followingNames] = await Promise.all([
+      getPostsForFeed({ page: 1, limit: 10 }),
+      getFollowingNames(localStorage.getItem('userName') || ''),
+    ]);
     if (posts && posts.data) {
+      console.log('Following names in HomePage:', followingNames);
       const feedSection = renderFeedSection({
         posts: posts.data,
         currentPage: 'newest',
+        followingNames: followingNames || new Set<string>(),
       });
       container.appendChild(feedSection);
     }

@@ -22,6 +22,7 @@ export function renderPostCreationForm() {
 
   const postTitle = TextInput({
     id: 'post-title',
+    name: 'title',
     label: 'Post Title*',
     type: 'text',
     placeholder: 'Title. Max 60 characters',
@@ -45,6 +46,7 @@ export function renderPostCreationForm() {
 
   const tagsInput = TextInput({
     id: 'post-tags',
+    name: 'tags',
     label: 'Tags',
     type: 'text',
     placeholder: 'Enter tags separated by commas (optional)',
@@ -55,6 +57,7 @@ export function renderPostCreationForm() {
 
   const imgLinkInput = TextInput({
     id: 'img-link',
+    name: 'image',
     label: 'Image Link',
     type: 'url',
     placeholder: 'Enter an image link (optional)',
@@ -66,6 +69,7 @@ export function renderPostCreationForm() {
 
   const imgAltInput = TextInput({
     id: 'img-alt',
+    name: 'imageAlt',
     label: 'Image Alt Text',
     type: 'text',
     placeholder: 'Enter image alt text (optional)',

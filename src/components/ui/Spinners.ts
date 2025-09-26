@@ -11,10 +11,9 @@ export function showPageSpinner(parent?: HTMLElement) {
 export function hidePageSpinner() {
   const spinner = document.getElementById('loader');
   if (spinner) {
-    console.log('Hiding spinner');
     spinner.classList.remove('loader');
     spinner.parentElement?.remove();
   } else {
-    console.log('No spinner found to hide');
+    console.warn('No spinner found to hide.');
   }
 }

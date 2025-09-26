@@ -4,7 +4,6 @@ import { register } from '../../api/authService';
 import { showPopup } from '../ui/Popups';
 
 export async function handleRegistrationFormSubmit(event: Event) {
-  console.log('handleRegistrationFormSubmit called');
   event.preventDefault();
   const form = event.target as HTMLFormElement;
   const formData = new FormData(form);
@@ -12,11 +11,9 @@ export async function handleRegistrationFormSubmit(event: Event) {
   const name = unformattedName.trim().replace(/\s+/g, '_');
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
-  console.log('Form Data:', { name, email, password });
 
   try {
     const response = await register({ name, email, password });
-    console.log('Registration successful:', response);
     if (response && response.data) {
       showPopup({
         title: 'Registration successful!',
@@ -56,7 +53,6 @@ export function renderRegistrationForm() {
   form.id = 'register-form';
   form.className = 'flex flex-col gap-8 w-full items-center';
   form.addEventListener('submit', handleRegistrationFormSubmit);
-  console.log('event listener added to form');
 
   const nameInput = TextInput({
     id: 'name',

@@ -1,6 +1,8 @@
 import type { Post } from '../../api/postsService';
+import { Button } from './Buttons';
+import { followProfile, unfollowProfile } from '../../api/profilesService';
 
-export function renderPostCard(post: Post): HTMLElement {
+export function renderPostCard(post: Post, isFollowing?: boolean): HTMLElement {
   if (!post) {
     console.error('No post data provided to renderPostCard.');
 
@@ -8,7 +10,7 @@ export function renderPostCard(post: Post): HTMLElement {
   }
   const postCard = document.createElement('article');
   postCard.className =
-    'post-card flex flex-col justify-center items-center lg:flex-row w-full lg:max-h-[10rem] rounded-2xl border-8 border-black overflow-hidden hover:cursor-pointer';
+    'post-card flex flex-col w-[calc(100%-2rem)] max-w-[42.5rem] justify-center items-center lg:flex-row w-full lg:max-h-[10rem] rounded-2xl border-8 border-black overflow-hidden hover:cursor-pointer';
   const media = document.createElement('div');
   media.className =
     'flex lg:h-40 lg:w-[calc(20%-1rem)] shrink-0 overflow-hidden';
@@ -27,10 +29,51 @@ export function renderPostCard(post: Post): HTMLElement {
   const header = document.createElement('div');
   header.className = 'flex flex-row w-full justify-between';
 
+  const authorContainer = document.createElement('div');
+  authorContainer.className = 'flex flex-row gap-2 items-center';
   const author = document.createElement('span');
   author.className = 'font-body text-xs';
   author.textContent = post.author?.name || 'Unknown Profile';
-  header.appendChild(author);
+  authorContainer.appendChild(author);
+  if (isFollowing !== undefined) {
+    let followingState = isFollowing;
+    const followAuthorButton = Button({
+      label: followingState ? 'Unfollow' : 'Follow',
+      size: 'xsmall',
+      onClick: async (event: MouseEvent) => {
+        event.stopPropagation();
+        const authorName = post.author?.name;
+        if (!authorName) {
+          console.error('Author name is undefined. Cannot follow/unfollow.');
+          return;
+        }
+        const buttonElement = event.currentTarget as HTMLButtonElement;
+        buttonElement.disabled = true;
+        const originalLabel = buttonElement.textContent;
+        buttonElement.textContent = followingState
+          ? 'Unfollowing...'
+          : 'Following...';
+        try {
+          if (followingState) {
+            await unfollowProfile(authorName);
+          } else {
+            await followProfile(authorName);
+          }
+          followingState = !followingState;
+          buttonElement.textContent = followingState ? 'Unfollow' : 'Follow';
+        } catch (error) {
+          console.error('Follow toggle failed:', error);
+          buttonElement.textContent =
+            originalLabel || (followingState ? 'Unfollow' : 'Follow');
+        } finally {
+          buttonElement.disabled = false;
+        }
+        window.location.reload();
+      },
+    });
+    authorContainer.appendChild(followAuthorButton);
+  }
+  header.appendChild(authorContainer);
 
   const meta = document.createElement('div');
   meta.className = 'flex flex-row gap-2 items-center';
@@ -81,9 +124,9 @@ export function renderPostCard(post: Post): HTMLElement {
   tagsContainer.className = 'flex flex-row text-sm text-black underline gap-2';
   if (Array.isArray(post.tags)) {
     post.tags.forEach((tag) => {
-      const tagSpan = document.createElement('span');
-      tagSpan.textContent = `#${tag}`;
-      tagsContainer.appendChild(tagSpan);
+      const tagElement = document.createElement('span');
+      tagElement.textContent = `#${tag}`;
+      tagsContainer.appendChild(tagElement);
     });
   }
   footer.appendChild(tagsContainer);
