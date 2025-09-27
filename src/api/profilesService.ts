@@ -154,6 +154,6 @@ export async function getFollowingNames(me: string): Promise<Set<string>> {
   }
 }
 
-export async function searchProfiles(query: string): Promise<ProfilesResponse> {
-  //TODO
-}
+// export async function searchProfiles(query: string): Promise<ProfilesResponse> {
+//   //TODO
+// }

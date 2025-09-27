@@ -1,6 +1,5 @@
 import { TextInput } from './inputs/TextInput';
 import { Button } from '../ui/Buttons';
-import { showPopup } from '../ui/Popups';
 /**
  * Handles the search form submission
  * @param event - The submit event

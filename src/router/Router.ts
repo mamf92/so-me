@@ -3,67 +3,58 @@
  * It maps URL paths to view-rendering functions and updates the content area.
  */
 
+export type RouteResult = string | HTMLElement | null | undefined;
+export type RouteHandler = () => RouteResult | Promise<RouteResult>;
+
 export class Router {
-  private routes: Record<
-    string,
-    () => string | HTMLElement | Promise<string | HTMLElement>
-  >;
-  private contentElement: HTMLElement;
+  private routes: Record<string, RouteHandler>;
+  private outlet: HTMLElement;
   private onRouteChange?: (path: string) => void;
 
-  // Initialize with route mappings and the target content element
   constructor(
-    routes: Record<
-      string,
-      () => string | HTMLElement | Promise<string | HTMLElement>
-    >,
-    contentElement: HTMLElement,
+    routes: Record<string, RouteHandler>,
+    outlet: HTMLElement,
     onRouteChange?: (path: string) => void
   ) {
     this.routes = routes;
-    this.contentElement = contentElement;
+    this.outlet = outlet;
     this.onRouteChange = onRouteChange;
-
-    // Listen for back/forward navigation
     window.addEventListener('popstate', () => this.resolveRoute());
   }
 
-  // Called when a user clicks a link
   navigate(path: string): void {
     history.pushState({}, '', path);
     this.resolveRoute();
   }
 
-  // Find the correct view and render it
   resolveRoute(): void {
     const path = window.location.pathname;
+    this.onRouteChange?.(path);
 
-    // Notify about route change
-    if (this.onRouteChange) {
-      this.onRouteChange(path);
-    }
-    // Find the view function for the current path, or use the 404 view
     const view = this.routes[path] || this.notFoundView;
+    try {
+      const result = view();
+      if (result instanceof Promise) {
+        result
+          .then((resolved) => this.render(resolved))
+          .catch(() => this.render(this.errorView('Failed to load page.')));
+      } else {
+        this.render(result);
+      }
+    } catch {
+      this.render(this.errorView('Unexpected error.'));
+    }
+  }
 
-    // Render the view's content into our target element
-    const result = view();
-
-    if (typeof result === 'string') {
-      this.contentElement.innerHTML = result;
-    } else if (result instanceof HTMLElement) {
-      this.contentElement.innerHTML = '';
-      this.contentElement.appendChild(result);
-    } else if (result instanceof Promise) {
-      result.then((resolved) => {
-        if (typeof resolved === 'string') {
-          this.contentElement.innerHTML = resolved;
-        } else if (resolved instanceof HTMLElement) {
-          this.contentElement.innerHTML = '';
-          this.contentElement.appendChild(resolved);
-        }
-      });
+  private render(resolved: RouteResult): void {
+    if (typeof resolved === 'string') {
+      this.outlet.innerHTML = resolved;
+    } else if (resolved instanceof HTMLElement) {
+      this.outlet.innerHTML = '';
+      this.outlet.appendChild(resolved);
     } else {
-      this.contentElement.innerHTML = '';
+      // null / undefined -> clear (kept permissive)
+      this.outlet.innerHTML = '';
     }
   }
 
@@ -75,6 +66,15 @@ export class Router {
         <a href="/" class="mt-6 inline-block text-blue-600 hover:underline font-body">
           Return to home page
         </a>
+      </div>
+    `;
+  }
+
+  private errorView(message: string): string {
+    return `
+      <div class="text-center py-10">
+        <h1 class="text-2xl font-heading text-red-600 mb-4">Error</h1>
+        <p class="font-body">${message}</p>
       </div>
     `;
   }
