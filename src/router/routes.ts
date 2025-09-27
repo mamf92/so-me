@@ -3,7 +3,7 @@ import { renderRegistrationPage } from '../pages/RegistrationPage';
 import { renderHomePage } from '../pages/HomePage';
 import { renderExplorePage } from '../pages/ExplorePage';
 import { renderMyProfilePage } from '../pages/MyProfilePage';
-import { renderEditPostpage } from '../pages/EditPostPage';
+import { renderEditPostPage } from '../pages/EditPostPage';
 import { renderPostPage } from '../pages/PostPage';
 import { renderTestPage } from '../pages/TestPage';
 import { renderHomePageWithFollowingFeed } from '../pages/HomePageFollowing';
@@ -19,7 +19,7 @@ export const routes = {
   '/register': renderRegistrationPage,
   '/myprofile': renderMyProfilePage,
   '/create': renderCreatePostPage,
-  '/edit': renderEditPostpage,
+  '/edit': renderEditPostPage,
   '/test': renderTestPage,
   '/profile': renderProfilePage,
 };
