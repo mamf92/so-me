@@ -23,7 +23,7 @@ export function renderMyPostsSection({
   const myPostsContainer = document.createElement('div');
   myPostsContainer.innerHTML = '';
   myPostsContainer.className =
-    'flex flex-col gap-4 justify-center align-center';
+    'flex flex-col gap-4 justify-center align-center items-center';
   const myPostsActions = document.createElement('div');
   myPostsActions.className =
     'flex flex-row justify-between gap-4 items-center w-full';

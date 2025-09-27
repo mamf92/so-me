@@ -1,8 +1,13 @@
 import { isAuthenticated } from '../api/authService';
 import { getPostsFromFollowedUsers } from '../api/postsService';
 import type { PostsResponse, PaginationProps, Post } from '../api/postsService';
-import { getPostsByProfile, getFollowingNames } from '../api/profilesService';
+import {
+  getPostsByProfile,
+  getFollowingNames,
+  getProfileByName,
+} from '../api/profilesService';
 import type { PostsByProfileProps } from '../api/profilesService';
+import { renderMyProfileCard } from '../components/ui/MyProfileCard';
 import { renderMyPostsSection } from '../components/sections/MyPostsSection';
 import type { CurrentFeed } from '../components/sections/MyPostsSection';
 import { showPageSpinner, hidePageSpinner } from '../components/ui/Spinners';
@@ -47,6 +52,24 @@ async function getFollowedPostsForFollowingFeed({
   }
 }
 
+async function getMyProfileForMyProfilePage(name: string) {
+  try {
+    const response = await getProfileByName(name);
+    if (!response) {
+      throw new Error('Could not fetch your profile.');
+    }
+    return response.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      showPopup({
+        title: 'Error fetching your profile.',
+        message: error.message,
+        icon: 'error',
+      });
+    }
+  }
+}
+
 export async function renderMyProfilePage() {
   const isLoggedIn = isAuthenticated();
   if (!isLoggedIn) {
@@ -80,6 +103,21 @@ export async function renderMyProfilePage() {
   const container = document.createElement('div');
   container.className =
     'flex flex-col items-center justify-center gap-8 mb-[10rem]';
+
+  const profileContainer = document.createElement('div');
+  profileContainer.className =
+    'flex flex-col items-center justify-center w-full';
+  container.appendChild(profileContainer);
+
+  const feedContainer = document.createElement('div');
+  feedContainer.className = 'flex flex-col items-center justify-center w-full';
+  container.appendChild(feedContainer);
+
+  const profile = await getMyProfileForMyProfilePage(checkedUserName);
+  if (profile) {
+    const profileCard = renderMyProfileCard(profile);
+    profileContainer.appendChild(profileCard);
+  }
 
   async function fetchPosts(
     feed: CurrentFeed
@@ -118,8 +156,7 @@ export async function renderMyProfilePage() {
         },
         followingNames: followingNames,
       });
-      container.innerHTML = '';
-      container.appendChild(feedSection);
+      feedContainer.replaceChildren(feedSection);
     } catch (error) {
       if (error instanceof Error) {
         showPopup({

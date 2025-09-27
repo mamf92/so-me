@@ -57,7 +57,16 @@ export async function getProfiles(): Promise<ProfilesResponse> {
 }
 
 export async function getProfileByName(name: string): Promise<ProfileResponse> {
-  //TODO
+  try {
+    const response = await get<ProfileResponse>(`/social/profiles/${name}`);
+    if (!response) {
+      throw new Error('Could not fetch profile by name.');
+    }
+    return response;
+  } catch (error) {
+    console.error('Error fetching profile by name:', error);
+    throw error;
+  }
 }
 
 export async function getPostsByProfile(
