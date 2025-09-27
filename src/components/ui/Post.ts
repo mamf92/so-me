@@ -54,7 +54,7 @@ export function renderPost(post: SinglePostResponse): HTMLElement {
   meta.appendChild(clockIcon);
 
   const date = document.createElement('span');
-  date.className = 'font-body';
+  date.className = 'font-body text-xs';
   date.textContent = new Date(post.data.updated).toLocaleDateString([], {
     weekday: 'short',
     year: 'numeric',

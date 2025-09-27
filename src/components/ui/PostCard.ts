@@ -10,7 +10,7 @@ export function renderPostCard(post: Post, isFollowing?: boolean): HTMLElement {
   }
   const postCard = document.createElement('article');
   postCard.className =
-    'post-card flex flex-col w-[calc(100%-2rem)] max-w-[42.5rem] justify-center items-center lg:flex-row w-full lg:max-h-[10rem] rounded-2xl border-8 border-black overflow-hidden hover:cursor-pointer';
+    'post-card flex flex-col w-[calc(100%-2rem)] max-w-[42.5rem] justify-center items-center lg:flex-row w-full lg:max-h-[10rem] rounded-2xl border-8 border-black overflow-hidden';
   const media = document.createElement('div');
   media.className =
     'flex lg:h-40 lg:w-[calc(20%-1rem)] shrink-0 overflow-hidden';
@@ -18,7 +18,7 @@ export function renderPostCard(post: Post, isFollowing?: boolean): HTMLElement {
     const img = document.createElement('img');
     img.src = post.media.url;
     img.alt = post.media.alt || post.title;
-    img.className = 'lg:h-full lg:w-full object-cover';
+    img.className = 'lg:h-full lg:w-full object-cover hover:cursor-pointer';
     media.appendChild(img);
   }
   postCard.appendChild(media);
@@ -32,8 +32,12 @@ export function renderPostCard(post: Post, isFollowing?: boolean): HTMLElement {
   const authorContainer = document.createElement('div');
   authorContainer.className = 'flex flex-row gap-2 items-center';
   const author = document.createElement('span');
-  author.className = 'font-body text-xs';
+  author.className = 'font-body text-xs hover:underline hover:cursor-pointer';
   author.textContent = post.author?.name || 'Unknown Profile';
+  author.addEventListener('click', (event) => {
+    event.stopPropagation();
+    window.location.href = `/profile?name=${post.author?.name}`;
+  });
   authorContainer.appendChild(author);
   if (isFollowing !== undefined) {
     let followingState = isFollowing;
@@ -108,12 +112,13 @@ export function renderPostCard(post: Post, isFollowing?: boolean): HTMLElement {
   content.appendChild(header);
 
   const title = document.createElement('h3');
-  title.className = 'font-heading font-extrabold text-sm text-left';
+  title.className =
+    'font-heading font-extrabold text-sm text-left hover:cursor-pointer';
   title.textContent = post.title;
   content.appendChild(title);
 
   const body = document.createElement('p');
-  body.className = 'font-body text-xs';
+  body.className = 'font-body text-xs hover:cursor-pointer';
   body.textContent = post.body;
   content.appendChild(body);
 
