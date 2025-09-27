@@ -1,12 +1,48 @@
 import { isAuthenticated } from '../api/authService';
-import { getPostsFromFollowedUsers } from '../api/postsService';
-import type { PostsResponse, PaginationProps } from '../api/postsService';
-import { getPostsByProfile } from '../api/profilesService';
+import type { PostsResponse } from '../api/postsService';
+import { getPostsByProfile, getProfileByName } from '../api/profilesService';
 import type { PostsByProfileProps } from '../api/profilesService';
-import { renderMyPostsSection } from '../components/sections/MyPostsSection';
-import type { CurrentFeed } from '../components/sections/MyPostsSection';
+import { renderProfileCard } from '../components/ui/ProfileCard';
 import { showPageSpinner, hidePageSpinner } from '../components/ui/Spinners';
 import { showPopup } from '../components/ui/Popups';
+import { renderProfileFeedSection } from '../components/sections/ProfileFeedSection';
+
+function getProfileNameFromURL(): string {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const checkedUserName = urlParams.get('name');
+
+  if (!checkedUserName) {
+    showPopup({
+      title: 'Profile name is missing in URL',
+      message: 'Please provide a profile name in the URL as a query parameter.',
+      icon: 'warning',
+    });
+    setTimeout(() => {
+      window.location.href = '/explore';
+    }, 3000);
+    throw new Error('Profile name is missing in URL');
+  }
+  return checkedUserName;
+}
+
+async function getProfileForProfilePage(name: string) {
+  try {
+    const response = await getProfileByName(name);
+    if (!response) {
+      throw new Error('Could not fetch your profile.');
+    }
+    return response.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      showPopup({
+        title: 'Error fetching your profile.',
+        message: error.message,
+        icon: 'error',
+      });
+    }
+  }
+}
 
 async function getPostsForProfileFeed({
   name,
@@ -28,25 +64,6 @@ async function getPostsForProfileFeed({
   }
 }
 
-async function getFollowedPostsForFollowingFeed({
-  page = 1,
-  limit = 10,
-}: PaginationProps): Promise<PostsResponse | void> {
-  try {
-    const postsPromise = getPostsFromFollowedUsers({ page, limit });
-    const posts = await postsPromise;
-    return posts;
-  } catch (error) {
-    if (error instanceof Error) {
-      showPopup({
-        title: 'Error fetching followed posts for feed.',
-        message: error.message,
-        icon: 'error',
-      });
-    }
-  }
-}
-
 export async function renderProfilePage() {
   const isLoggedIn = isAuthenticated();
   if (!isLoggedIn) {
@@ -61,70 +78,35 @@ export async function renderProfilePage() {
     return;
   }
 
-  const userName = localStorage.getItem('userName');
-  if (!userName) {
-    showPopup({
-      title: 'User name not found',
-      message: 'Please log in again.',
-      icon: 'warning',
-    });
-    setTimeout(() => {
-      window.location.href = '/login';
-    }, 3000);
-    return;
-  }
-
-  const checkedUserName: string = userName;
-  let currentFeed: CurrentFeed = 'newest';
+  const profileName = getProfileNameFromURL();
 
   const container = document.createElement('div');
   container.className =
-    'flex flex-col items-center justify-center gap-8 mb-[10rem]';
+    'flex flex-col items-center justify-center gap-12 mb-[10rem]';
 
-  async function fetchPosts(feed: CurrentFeed) {
-    if (feed === 'newest') {
-      return await getPostsForProfileFeed({
-        name: checkedUserName,
-        page: 1,
-        limit: 10,
-      });
-    } else {
-      return await getFollowedPostsForFollowingFeed({ page: 1, limit: 10 });
-    }
+  const profileContainer = document.createElement('div');
+  profileContainer.className =
+    'flex flex-col items-center justify-center w-full';
+  container.appendChild(profileContainer);
+
+  const feedContainer = document.createElement('div');
+  feedContainer.className = 'flex flex-col items-center justify-center w-full';
+  container.appendChild(feedContainer);
+
+  const profileData = await getProfileForProfilePage(profileName);
+  if (profileData) {
+    console.log('Profile data:', profileData);
+    const profileCard = renderProfileCard(profileData);
+    profileContainer.appendChild(profileCard);
   }
-
-  async function renderProfileFeedSection(feed: CurrentFeed) {
-    showPageSpinner();
-    currentFeed = feed;
-    try {
-      const posts = await fetchPosts(feed);
-      if (posts && posts.data) {
-        const feedSection = renderMyPostsSection({
-          posts: posts.data,
-          currentPage: currentFeed,
-          onChangeFeed: (next) => {
-            if (next !== currentFeed) {
-              renderProfileFeedSection(next);
-            }
-          },
-        });
-        container.innerHTML = '';
-        container.appendChild(feedSection);
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        showPopup({
-          title: 'Error rendering profile page.',
-          message: error.message,
-          icon: 'error',
-        });
-      }
-    } finally {
-      hidePageSpinner();
-    }
+  showPageSpinner();
+  const postsResponse = await getPostsForProfileFeed({ name: profileName });
+  if (postsResponse) {
+    console.log('Posts response:', postsResponse);
+    const feedSection = renderProfileFeedSection(postsResponse.data);
+    feedContainer.appendChild(feedSection);
   }
-
-  await renderProfileFeedSection(currentFeed);
+  hidePageSpinner();
 
   return container;
 }

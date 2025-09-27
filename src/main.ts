@@ -41,7 +41,7 @@ function checkCurrentPage(pathname: string): HeaderProps {
   switch (pathname) {
     case '/':
       return 'feed';
-    case '/profile':
+    case '/myprofile':
       return 'profile';
     case '/explore':
       return 'explore';

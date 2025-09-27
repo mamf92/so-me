@@ -88,12 +88,12 @@ export async function getPostsByProfile(
   }
 }
 
-export async function updateProfile(
-  name: string,
-  data: Partial<Profile>
-): Promise<ProfileResponse> {
-  //TODO
-}
+// export async function updateProfile(
+//   name: string,
+//   data: Partial<Profile>
+// ): Promise<ProfileResponse> {
+//   //TODO
+// }
 
 export async function followProfile(name: string): Promise<FollowingResponse> {
   try {
