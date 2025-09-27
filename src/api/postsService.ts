@@ -149,9 +149,11 @@ export async function getPostsFromFollowedUsers({
   }
 }
 
-export async function searchPosts(query: string): Promise<PostsResponse> {
-  //TODO
-}
+// export async function searchPosts(query: string): Promise<PostsResponse> {
+//   //TODO
+// }
+
+// Create, Update, Delete Post operations
 
 export async function createPost(
   data: CreatePostFormData
@@ -173,9 +175,18 @@ export async function createPost(
 
 export async function updatePost(
   id: number,
-  data: Partial<Post>
+  data: CreatePostFormData
 ): Promise<SinglePostResponse> {
-  //TODO
+  try {
+    const response = await put<SinglePostResponse>(`/social/posts/${id}`, data);
+    if (!response) {
+      throw new Error('Error updating post: No response data received.');
+    }
+    return response;
+  } catch (error) {
+    console.error('Error updating post:', error);
+    throw error;
+  }
 }
 export async function deletePost(id: number): Promise<void> {
   try {

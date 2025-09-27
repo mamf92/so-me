@@ -80,6 +80,7 @@ export function renderPost(post: SinglePostResponse): HTMLElement {
   const body = document.createElement('p');
   body.className = 'font-body text-sm';
   body.textContent = post.data.body;
+  console.log('Post body:', post.data.body);
   content.appendChild(body);
 
   if (Array.isArray(post.data.tags) && post.data.tags.length > 0) {
