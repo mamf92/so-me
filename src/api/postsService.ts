@@ -149,9 +149,20 @@ export async function getPostsFromFollowedUsers({
   }
 }
 
-// export async function searchPosts(query: string): Promise<PostsResponse> {
-//   //TODO
-// }
+export async function searchPosts(query: string): Promise<PostsResponse> {
+  try {
+    const response = await get<PostsResponse>(
+      `/social/posts/search?q=${query}&_author=true`
+    );
+    if (!response) {
+      throw new Error('Error fetching search results.');
+    }
+    return response;
+  } catch (error) {
+    console.error('Error fetching search results:', error);
+    throw error;
+  }
+}
 
 // Create, Update, Delete Post operations
 

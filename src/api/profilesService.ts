@@ -53,7 +53,16 @@ export interface ProfileWithRelationsResponse {
 }
 
 export async function getProfiles(): Promise<ProfilesResponse> {
-  //TODO
+  try {
+    const response = await get<ProfilesResponse>('/social/profiles');
+    if (!response) {
+      throw new Error('Could not fetch profiles.');
+    }
+    return response;
+  } catch (error) {
+    console.error('Error fetching profiles:', error);
+    throw error;
+  }
 }
 
 export async function getProfileByName(name: string): Promise<ProfileResponse> {
@@ -96,6 +105,7 @@ export async function getPostsByProfile(
 // }
 
 export async function followProfile(name: string): Promise<FollowingResponse> {
+  console.log(`Calling followProfile for: ${name}`);
   try {
     const response = await put<FollowingResponse>(
       `/social/profiles/${name}/follow`

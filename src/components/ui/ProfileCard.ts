@@ -1,4 +1,4 @@
-import type { Profile } from '../../api/profilesService';
+import { type Profile } from '../../api/profilesService';
 
 export function renderProfileCard(profile: Profile): HTMLElement {
   if (!profile) {
@@ -8,7 +8,10 @@ export function renderProfileCard(profile: Profile): HTMLElement {
   }
   const profileCard = document.createElement('article');
   profileCard.className =
-    'profile-card flex flex-col w-[calc(100%-2rem)] sm:max-w-[42.5rem] justify-center items-center sm:flex-row lg:max-h-[8rem] rounded-2xl border-8 border-black overflow-hidden';
+    'profile-card flex flex-col w-[calc(100%-2rem)] sm:max-w-[42.5rem] justify-center items-center sm:flex-row lg:max-h-[8rem] rounded-2xl border-8 border-black overflow-hidden hover:cursor-pointer';
+  profileCard.addEventListener('click', () => {
+    window.location.href = `/profile?name=${profile.name}`;
+  });
   if (profile.avatar) {
     const avatarContainer = document.createElement('div');
     avatarContainer.className =
@@ -33,6 +36,7 @@ export function renderProfileCard(profile: Profile): HTMLElement {
   author.className = 'font-heading text-md font-extrabold';
   author.textContent = profile.name;
   authorContainer.appendChild(author);
+
   header.appendChild(authorContainer);
 
   const relations = document.createElement('div');
