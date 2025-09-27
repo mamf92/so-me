@@ -95,7 +95,7 @@ export function renderPostCreationForm() {
     name: 'body',
     placeholder: 'Write your post content here.',
     required: true,
-    title: 'Post body must be at least 3 character long',
+    title: 'Post body must be between 3 and 280 characters',
     minLength: 3,
     maxLength: 280,
   });

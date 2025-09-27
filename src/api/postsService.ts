@@ -118,7 +118,9 @@ export async function getPosts({
 
 export async function getPostById(postId: number): Promise<SinglePostResponse> {
   try {
-    const response = await get<SinglePostResponse>(`/social/posts/${postId}`);
+    const response = await get<SinglePostResponse>(
+      `/social/posts/${postId}?_author=true`
+    );
     if (!response) {
       throw new Error('Could not get post.');
     }
