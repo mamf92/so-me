@@ -1,7 +1,9 @@
 import { isAuthenticated } from '../api/authService';
-import { getPosts } from '../api/postsService';
+import { getPosts, searchPosts } from '../api/postsService';
 import { getProfileByName } from '../api/profilesService';
 import { renderProfileCard } from '../components/ui/ProfileCard';
+import { renderPostCard } from '../components/ui/PostCard';
+import { renderSearchField } from '../components/forms/SearchField';
 import { showPageSpinner, hidePageSpinner } from '../components/ui/Spinners';
 import { showPopup } from '../components/ui/Popups';
 
@@ -55,9 +57,49 @@ export async function renderExplorePage() {
   const container = document.createElement('div');
   container.className = 'flex flex-col items-center justify-center mb-[10rem]';
 
+  const searchContainer = document.createElement('div');
+  searchContainer.className =
+    'flex flex-col items-center justify-center w-full mb-8';
+
   const feedContainer = document.createElement('div');
   feedContainer.className =
     'flex flex-col items-center justify-center w-full gap-6';
+
+  function handleSearch(query: string) {
+    if (!query.trim()) return;
+    showPageSpinner();
+    searchPosts(query)
+      .then((response) => {
+        feedContainer.innerHTML = '';
+        if (!response || !response.data || response.data.length === 0) {
+          showPopup({
+            title: 'No posts found',
+            message: 'No posts matched your search query.',
+            icon: 'warning',
+          });
+          return;
+        }
+        for (const post of response.data) {
+          feedContainer.appendChild(renderPostCard(post));
+        }
+      })
+      .catch((error) => {
+        console.error('Error searching posts:', error);
+        if (error instanceof Error) {
+          showPopup({
+            title: 'Error searching posts',
+            message: error.message,
+            icon: 'error',
+          });
+        }
+      })
+      .finally(() => hidePageSpinner());
+  }
+
+  const searchField = renderSearchField(handleSearch);
+  searchContainer.appendChild(searchField);
+
+  container.appendChild(searchContainer);
   container.appendChild(feedContainer);
 
   showPageSpinner();
@@ -66,15 +108,12 @@ export async function renderExplorePage() {
       page: 1,
       limit: 30,
     });
-    if (authorNames.length === 0) {
+    if (authorNames.length === 0)
       throw new Error('No authors found from posts.');
-    }
 
     const profiles = await getProfilesForExplorePage(authorNames);
-
-    if (profiles.length === 0) {
+    if (profiles.length === 0)
       throw new Error('No profiles found for the authors.');
-    }
 
     for (const profile of profiles) {
       feedContainer.appendChild(renderProfileCard(profile));
