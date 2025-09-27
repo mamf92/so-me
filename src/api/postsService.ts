@@ -78,6 +78,18 @@ export interface PaginationProps {
   limit: number;
 }
 
+export interface CreatePostFormData {
+  title: string;
+  body: string;
+  tags?: string[];
+  media?: Media;
+}
+
+export interface CreatePostResponse {
+  data: Post;
+  meta: Record<string, unknown>;
+}
+
 /**
  * Fetches posts from the API with pagination and returns them
  * @param {number} page - The page number to fetch (1-based).
@@ -128,11 +140,28 @@ export async function getPostsFromFollowedUsers({
 export async function searchPosts(query: string): Promise<PostsResponse> {
   //TODO
 }
+
 export async function createPost(
-  data: Partial<Post>
-): Promise<SinglePostResponse> {
-  //TODO
+  data: CreatePostFormData
+): Promise<CreatePostResponse> {
+  console.log('Creating post with data in createPost:', data);
+  if (!validateCreatePostData(data)) {
+    console.log('Validation failed for createPost data:', data);
+    throw new Error('Validation failed');
+  }
+  console.log('Validation passed for createPost data:', data);
+  try {
+    const response = await post<CreatePostResponse>('/social/posts', data);
+    if (!response) {
+      throw new Error('Error creating post: No response data received.');
+    }
+    return response;
+  } catch (error) {
+    console.error('Error creating post:', error);
+    throw error;
+  }
 }
+
 export async function updatePost(
   id: number,
   data: Partial<Post>
@@ -157,4 +186,92 @@ export async function deletePost(id: number): Promise<void> {
     }
     throw error;
   }
+}
+
+/**
+ * Validates registration form data including name, email and password requirements
+ * @param {Object} data - The form data object to validate
+ * @param {string} data.name - The user's full name
+ * @param {string} data.email - The user's email address
+ * @param {string} data.password - The user's password
+ * @returns {boolean} True if all validation passes, false otherwise
+ */
+
+function validateCreatePostData(data: CreatePostFormData): boolean {
+  if (!data) {
+    showPopup({
+      title: 'No data provided.',
+      message: 'Please check all fields, and try again.',
+      icon: 'error',
+    });
+    return false;
+  }
+
+  if (!data.title || !data.body) {
+    showPopup({
+      title: 'Missing required fields.',
+      message: 'Title and body are required.',
+      icon: 'error',
+    });
+    return false;
+  }
+  const titleRegex = /^.{3,60}$/;
+  const bodyRegex = /^.{3,}$/;
+  const tagRegex = /^[a-zA-ZÀ-ÿ0-9]{3,}$/;
+  const imageUrlRegex = /^.*\.(gif|jpe?g|png|webp)($|\?.*$|#.*$|\/.*$)$/;
+  const imageAltRegex = /^.{3,150}$/;
+
+  if (!titleRegex.test(data.title)) {
+    showPopup({
+      title: 'Invalid title format.',
+      message:
+        'Min 3 chars. Letters, numbers and special characters #?!@$%^&*- are allowed.',
+      icon: 'warning',
+    });
+    return false;
+  }
+
+  if (!bodyRegex.test(data.body)) {
+    showPopup({
+      title: 'Invalid body format.',
+      message:
+        'Min 3 chars. Letters, numbers and special characters #?!@$%^&*- are allowed.',
+      icon: 'warning',
+    });
+    return false;
+  }
+
+  if (data.tags) {
+    for (const tag of data.tags) {
+      if (!tagRegex.test(tag)) {
+        showPopup({
+          title: 'Invalid tag format.',
+          message:
+            'Each tag must be at least 3 characters long and can only contain letters and numbers.',
+          icon: 'warning',
+        });
+        return false;
+      }
+    }
+  }
+  if (data.media) {
+    if (!imageUrlRegex.test(data.media.url)) {
+      showPopup({
+        title: 'Invalid image URL format.',
+        message: 'Image URL must be a valid image file (gif, jpeg, png, webp).',
+        icon: 'warning',
+      });
+      return false;
+    }
+    if (!imageAltRegex.test(data.media.alt)) {
+      showPopup({
+        title: 'Invalid image alt text format.',
+        message: 'Alt text must be 150 characters or less.',
+        icon: 'warning',
+      });
+      return false;
+    }
+  }
+
+  return true;
 }
