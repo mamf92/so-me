@@ -9,7 +9,6 @@ import { showPopup } from '../ui/Popups';
  * @param event - The submit event
  */
 export async function handleCreatePostFormSubmit(event: Event) {
-  console.log('Form submit event:', event);
   event.preventDefault();
   const form = event.target as HTMLFormElement;
   const formData = new FormData(form);
@@ -18,7 +17,6 @@ export async function handleCreatePostFormSubmit(event: Event) {
   const tags = formData.get('tags') as string;
   const image = formData.get('image') as string;
   const alt = formData.get('image-alt') as string;
-  console.log('Form data from CreatePostForm:', formData);
   try {
     const response = await createPost({
       title,
@@ -97,8 +95,9 @@ export function renderPostCreationForm() {
     name: 'body',
     placeholder: 'Write your post content here.',
     required: true,
-    title: 'Post body must be at least 3 character long',
+    title: 'Post body must be between 3 and 280 characters',
     minLength: 3,
+    maxLength: 280,
   });
   bodyInput.classList.add('w-full');
 

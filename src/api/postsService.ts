@@ -78,6 +78,7 @@ export interface PaginationProps {
   limit: number;
 }
 
+/**  */
 export interface CreatePostFormData {
   title: string;
   body: string;
@@ -115,8 +116,19 @@ export async function getPosts({
   }
 }
 
-export async function getPostById() {
-  //TODO
+export async function getPostById(postId: number): Promise<SinglePostResponse> {
+  try {
+    const response = await get<SinglePostResponse>(
+      `/social/posts/${postId}?_author=true`
+    );
+    if (!response) {
+      throw new Error('Could not get post.');
+    }
+    return response;
+  } catch (error) {
+    console.error('Error fetching post:', error);
+    throw error;
+  }
 }
 
 export async function getPostsFromFollowedUsers({
@@ -144,12 +156,9 @@ export async function searchPosts(query: string): Promise<PostsResponse> {
 export async function createPost(
   data: CreatePostFormData
 ): Promise<CreatePostResponse> {
-  console.log('Creating post with data in createPost:', data);
   if (!validateCreatePostData(data)) {
-    console.log('Validation failed for createPost data:', data);
     throw new Error('Validation failed');
   }
-  console.log('Validation passed for createPost data:', data);
   try {
     const response = await post<CreatePostResponse>('/social/posts', data);
     if (!response) {
