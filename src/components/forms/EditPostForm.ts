@@ -91,6 +91,7 @@ export function renderPostEditForm(post: Post) {
 
   const bodyInput = TextArea({
     id: 'post-body',
+    name: 'body',
     label: 'Post Body*',
     placeholder: 'Write your post content here.',
     value: post.body,
