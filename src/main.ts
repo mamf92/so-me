@@ -1,3 +1,4 @@
+import './style.css';
 import { Router } from './router/Router';
 import { routes } from './router/routes';
 import { Header } from './components/layout/Header';
