@@ -22,7 +22,8 @@ export function renderPostCardWithEditActions(post: Post): HTMLElement {
   postContent.className =
     'flex flex-col sm:items-center sm:flex-row rounded-2xl overflow-hidden border-8 border-black';
   const mediaContainer = document.createElement('div');
-  mediaContainer.className = 'flex sm:max-w-[calc(20%-1rem)] shrink-0';
+  mediaContainer.className =
+    'flex justify-center sm:max-w-[calc(20%-1rem)] shrink-0';
   if (post.media) {
     const img = document.createElement('img');
     img.src = post.media.url;
