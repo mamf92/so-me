@@ -123,13 +123,11 @@ export async function getFollowingNames(me: string): Promise<Set<string>> {
     const response = await get<ProfileWithRelationsResponse>(
       `/social/profiles/${me}?_following=true`
     );
-    console.log('Fetched following names:', response);
     if (!response || !response.data) {
       throw new Error('Could not fetch following names.');
     }
 
     const names = response.data.following?.map((profile) => profile.name) || [];
-    console.log('Following names:', names);
     return new Set(names);
   } catch (error) {
     console.error('Error fetching following names:', error);

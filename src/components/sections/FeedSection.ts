@@ -82,6 +82,9 @@ export function renderFeedSection({
     const authorName = post.author?.name || '';
     const isFollowing = authorName !== '' && followingSet.has(authorName);
     const postCard = renderPostCard(post, isFollowing);
+    postCard.addEventListener('click', () => {
+      window.location.href = `/post?id=${post.id}`;
+    });
     feedContainer.appendChild(postCard);
   });
 
