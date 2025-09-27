@@ -6,14 +6,14 @@ export function renderMyProfileCard(profile: Profile): HTMLElement {
 
     return document.createElement('div');
   }
-  const profileCard = document.createElement('article');
-  profileCard.className =
-    'post-card flex flex-col w-[calc(100%-2rem)] sm:max-w-[42.5rem] justify-center items-center sm:flex-row lg:max-h-[10rem] rounded-2xl border-8 border-black overflow-hidden';
+  const myProfileCard = document.createElement('article');
+  myProfileCard.className =
+    'profile-card flex flex-col w-[calc(100%-2rem)] sm:max-w-[42.5rem] justify-center items-center sm:flex-row lg:max-h-[8rem] rounded-2xl border-8 border-black overflow-hidden';
   if (profile.avatar) {
     const avatarContainer = document.createElement('div');
     avatarContainer.className =
       'flex justify-center sm:max-w-[calc(20%-1rem)] shrink-0 lg:h-40 lg:w-[calc(20%-1rem)]';
-    profileCard.appendChild(avatarContainer);
+    myProfileCard.appendChild(avatarContainer);
     const avatarImg = document.createElement('img');
     avatarImg.src = profile.avatar.url;
     avatarImg.alt = profile.avatar.alt;
@@ -55,6 +55,6 @@ export function renderMyProfileCard(profile: Profile): HTMLElement {
   bio.textContent = profile.bio;
   content.appendChild(bio);
 
-  profileCard.appendChild(content);
-  return profileCard;
+  myProfileCard.appendChild(content);
+  return myProfileCard;
 }
