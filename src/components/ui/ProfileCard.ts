@@ -1,9 +1,4 @@
-import {
-  followProfile,
-  unfollowProfile,
-  type Profile,
-} from '../../api/profilesService';
-import { Button } from './Buttons';
+import { type Profile } from '../../api/profilesService';
 
 export function renderProfileCard(profile: Profile): HTMLElement {
   if (!profile) {
