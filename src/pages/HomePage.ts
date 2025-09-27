@@ -51,7 +51,6 @@ export async function renderHomePage() {
       getFollowingNames(localStorage.getItem('userName') || ''),
     ]);
     if (posts && posts.data) {
-      console.log('Following names in HomePage:', followingNames);
       const feedSection = renderFeedSection({
         posts: posts.data,
         currentPage: 'newest',

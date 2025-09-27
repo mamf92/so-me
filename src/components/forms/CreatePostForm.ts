@@ -1,30 +1,88 @@
 import { TextInput } from './inputs/TextInput';
 import { TextArea } from './inputs/TextArea';
 import { Button } from '../ui/Buttons';
+import { createPost } from '../../api/postsService';
+import { showPopup } from '../ui/Popups';
+
+/**
+ * Handles the login form submission
+ * @param event - The submit event
+ */
+export async function handleCreatePostFormSubmit(event: Event) {
+  console.log('Form submit event:', event);
+  event.preventDefault();
+  const form = event.target as HTMLFormElement;
+  const formData = new FormData(form);
+  const title = formData.get('title') as string;
+  const body = formData.get('body') as string;
+  const tags = formData.get('tags') as string;
+  const image = formData.get('image') as string;
+  const alt = formData.get('image-alt') as string;
+  console.log('Form data from CreatePostForm:', formData);
+  try {
+    const response = await createPost({
+      title,
+      body,
+      tags: tags
+        .split(/[,\s]+/)
+        .map((tag) => tag.trim().toLowerCase())
+        .filter(Boolean),
+      media: {
+        url: image,
+        alt: alt,
+      },
+    });
+    if (response && response.data) {
+      showPopup({
+        title: 'Post created!',
+        message: 'Your post has been created successfully.',
+        icon: 'success',
+      });
+      setTimeout(() => {
+        window.location.href = `/post?id=${response.data.id}`;
+      }, 2000);
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      showPopup({
+        title: 'Error creating post.',
+        message: error.message,
+        icon: 'error',
+      });
+    }
+  }
+}
+
+/**
+ * Renders the post creation form.
+ * @returns The form container element.
+ */
 
 export function renderPostCreationForm() {
   const formContainer = document.createElement('div');
   formContainer.className =
-    'flex flex-col w-[90vw] bg-white px-8 py-6 rounded-3xl border-16 border-black gap-8 lg:max-w-[42.5rem]';
+    'flex flex-col w-[90vw] bg-white px-8 py-6 rounded-3xl border-16 border-black gap-4 lg:max-w-[42.5rem]';
 
   const formTitle = document.createElement('h1');
   formTitle.innerText = 'Create a post';
-  formTitle.className = 'text-6xl font-extrabold self-center';
+  formTitle.className = 'text-4xl font-extrabold self-center';
 
   const formDescription = document.createElement('p');
   formDescription.innerHTML =
     'Fill in the required fields * and any extra fields if you want to. When done, click Publish. You can always edit your post later.';
-  formDescription.className = 'text-lg font-body self-center';
+  formDescription.className = 'text-md font-body self-center';
 
   const form = document.createElement('form');
   form.id = 'post-creator-form';
-  form.className = 'flex flex-col gap-8 w-full items-center';
+  form.className = 'flex flex-col gap-4 w-full items-center';
+  form.addEventListener('submit', handleCreatePostFormSubmit);
 
   const postTitle = TextInput({
     id: 'post-title',
     name: 'title',
     label: 'Post Title*',
     type: 'text',
+    pattern: '^.{3,60}$',
     placeholder: 'Title. Max 60 characters',
     required: true,
     title: 'Title must be between 3 and 60 characters',
@@ -36,10 +94,10 @@ export function renderPostCreationForm() {
   const bodyInput = TextArea({
     id: 'post-body',
     label: 'Post Body*',
-    placeholder: 'Write your post content here. Max 140 characters',
+    name: 'body',
+    placeholder: 'Write your post content here.',
     required: true,
     title: 'Post body must be at least 3 character long',
-    maxLength: 140,
     minLength: 3,
   });
   bodyInput.classList.add('w-full');
@@ -49,9 +107,12 @@ export function renderPostCreationForm() {
     name: 'tags',
     label: 'Tags',
     type: 'text',
-    placeholder: 'Enter tags separated by commas (optional)',
+    pattern: '^([a-zA-Z0-9]{3,}(?:[,\\s]+[a-zA-Z0-9]{3,})*)*$',
+    placeholder:
+      'Enter tags separated by commas or spaces. No special characters. (Optional)',
     required: false,
-    title: 'Tags must be comma separated and minimum 3 characters long',
+    title:
+      'Min 3 chars. Tags must be separated by commas or spaces. No special characters.',
   });
   tagsInput.classList.add('w-full');
 
@@ -69,12 +130,13 @@ export function renderPostCreationForm() {
 
   const imgAltInput = TextInput({
     id: 'img-alt',
-    name: 'imageAlt',
+    name: 'image-alt',
     label: 'Image Alt Text',
     type: 'text',
-    placeholder: 'Enter image alt text (optional)',
+    pattern: '^.{3,150}$',
+    placeholder: 'Enter image alt text. (Optional)',
     required: false,
-    title: 'Alt text must be minimum 3 characters long',
+    title: 'Alt text must be 150 characters or less',
   });
   imgAltInput.classList.add('w-full');
 

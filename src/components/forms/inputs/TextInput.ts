@@ -38,7 +38,7 @@ export function TextInput({
   const inputLabel = document.createElement('label');
   inputLabel.htmlFor = id;
   inputLabel.textContent = label;
-  inputLabel.className = 'font-heading text-lg font-bold';
+  inputLabel.className = 'font-heading text-md font-bold';
 
   const inputField = document.createElement('input');
   inputField.id = id;
@@ -54,7 +54,7 @@ export function TextInput({
     ? (TITLE_VARIANTS[title as TitleVariants] ?? (title as string))
     : '';
   inputField.className =
-    'flex flex-row px-4 py-3 bg-white rounded-lg outline-[0.1875rem] outline-black justify-start items-center font-body text-lg';
+    'flex flex-row p-2 bg-white rounded-lg outline-[0.1875rem] outline-black justify-start items-center font-body text-sm';
 
   container.appendChild(inputLabel);
   container.appendChild(inputField);
