@@ -3,12 +3,21 @@ import { Button } from './Buttons';
 import { followProfile, unfollowProfile } from '../../api/profilesService';
 const BASE = import.meta.env.BASE_URL;
 
+/**
+ * Renders a post card component.
+ * @param post The post data to render
+ * @param isFollowing Indicates if the user is following the post author
+ * @returns The rendered post card element
+ */
+
 export function renderPostCard(post: Post, isFollowing?: boolean): HTMLElement {
   if (!post) {
     console.error('No post data provided to renderPostCard.');
 
     return document.createElement('div');
   }
+
+  // Create the post card element
   const postCard = document.createElement('article');
   postCard.className =
     'post-card flex flex-col w-[calc(100%-2rem)] max-w-[42.5rem] justify-center items-center lg:flex-row w-full lg:max-h-[10rem] rounded-2xl border-8 border-black overflow-hidden';
@@ -40,6 +49,8 @@ export function renderPostCard(post: Post, isFollowing?: boolean): HTMLElement {
     window.location.href = BASE + `profile?name=${post.author?.name}`;
   });
   authorContainer.appendChild(author);
+
+  // If isFollowing is defined, show the follow/unfollow button
   if (isFollowing !== undefined) {
     let followingState = isFollowing;
     const followAuthorButton = Button({

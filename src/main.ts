@@ -19,7 +19,7 @@ export function App() {
   if (!headerContainer || !mainContent) {
     throw new Error('Required DOM elements not found');
   }
-
+  // Determine the current page based on the URL
   const rawPath = window.location.pathname;
   const strippedPath = rawPath.startsWith(BASE)
     ? rawPath.slice(BASE.length - 1) || '/'
@@ -44,7 +44,13 @@ export function App() {
   router.resolveRoute();
 }
 
+/** Checks the current page based on the pathname.
+ * @param pathname The current URL pathname
+ * @returns The corresponding HeaderProps value or null
+ */
+
 function checkCurrentPage(pathname: string): HeaderProps {
+  // Map pathname to HeaderProps
   switch (pathname) {
     case '/':
       return 'feed';

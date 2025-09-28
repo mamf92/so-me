@@ -57,7 +57,6 @@ export class Router {
       this.outlet.innerHTML = '';
       this.outlet.appendChild(resolved);
     } else {
-      // null / undefined -> clear (kept permissive)
       this.outlet.innerHTML = '';
     }
   }
