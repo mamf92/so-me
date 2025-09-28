@@ -6,6 +6,7 @@ import { renderPostCard } from '../components/ui/PostCard';
 import { renderSearchField } from '../components/forms/SearchField';
 import { showPageSpinner, hidePageSpinner } from '../components/ui/Spinners';
 import { showPopup } from '../components/ui/Popups';
+const BASE = import.meta.env.BASE_URL;
 
 async function getUniqueAuthorNamesFromPosts({
   page = 1,
@@ -49,7 +50,7 @@ export async function renderExplorePage() {
       icon: 'warning',
     });
     setTimeout(() => {
-      window.location.href = '/login';
+      window.location.href = BASE + 'login';
     }, 3000);
     return;
   }
@@ -80,7 +81,11 @@ export async function renderExplorePage() {
           return;
         }
         for (const post of response.data) {
-          feedContainer.appendChild(renderPostCard(post));
+          const postElement = renderPostCard(post);
+          postElement.addEventListener('click', () => {
+            window.location.href = BASE + `post?id=${post.id}`;
+          });
+          feedContainer.appendChild(postElement);
         }
       })
       .catch((error) => {
