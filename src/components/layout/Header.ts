@@ -1,5 +1,7 @@
 import { LinkButton } from '../ui/Buttons';
 
+const BASE = import.meta.env.BASE_URL;
+
 export type HeaderProps = 'feed' | 'profile' | 'explore' | null;
 
 export function Header(currentPage: HeaderProps): HTMLElement {
@@ -11,7 +13,7 @@ export function Header(currentPage: HeaderProps): HTMLElement {
   top.className = 'w-full flex justify-center';
 
   const logo = document.createElement('a');
-  logo.href = '/';
+  logo.href = BASE; // BASE already ends with '/'
   logo.className =
     'color-black font-heading text-3xl lg:text-6xl font-bold flex flex-row';
   logo.append('So Me');
@@ -34,19 +36,19 @@ export function Header(currentPage: HeaderProps): HTMLElement {
 
   const feedLink = LinkButton({
     label: 'Feed',
-    href: '/',
+    href: BASE, // home
     size: 'large',
     fill: currentPage === 'feed',
   });
   const profileLink = LinkButton({
     label: 'Profile',
-    href: '/myprofile',
+    href: BASE + 'myprofile',
     size: 'large',
     fill: currentPage === 'profile',
   });
   const exploreLink = LinkButton({
     label: 'Explore',
-    href: '/explore',
+    href: BASE + 'explore',
     size: 'large',
     fill: currentPage === 'explore',
   });
