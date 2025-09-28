@@ -43,7 +43,7 @@ export function renderSearchField(onSearch: (query: string) => void) {
     placeholder: 'Enter one search keyword',
     pattern: '\\S{1,30}',
     required: true,
-    title: 'SearchTitle',
+    title: 'Only one keyword, max 30 characters',
   });
 
   const submitButton = Button({

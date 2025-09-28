@@ -71,7 +71,7 @@ export function renderRegistrationForm() {
     name: 'email',
     label: 'Email',
     type: 'email',
-    placeholder: 'Enter your email',
+    placeholder: 'Enter your @stud.noroff.no email',
     pattern: '^[a-zA-Z0-9._%+\\-]+@stud\\.noroff\\.no$',
     required: true,
     title: 'EmailTitle',
