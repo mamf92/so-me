@@ -1,4 +1,5 @@
 import { LinkButton } from '../ui/Buttons';
+import { showPopup } from '../ui/Popups';
 
 const BASE = import.meta.env.BASE_URL;
 
@@ -13,7 +14,7 @@ export function Header(currentPage: HeaderProps): HTMLElement {
   top.className = 'w-full flex justify-center';
 
   const logo = document.createElement('a');
-  logo.href = BASE; // BASE already ends with '/'
+  logo.href = BASE;
   logo.className =
     'color-black font-heading text-3xl lg:text-6xl font-bold flex flex-row';
   logo.append('So Me');
@@ -26,8 +27,31 @@ export function Header(currentPage: HeaderProps): HTMLElement {
     'bg-[length:400%_100%] bg-[position:0%_50%] hover:bg-[position:100%_50%]';
   exclamation.textContent = '!';
   logo.appendChild(exclamation);
+  const logoutBtn = document.createElement('button');
+  logoutBtn.type = 'button';
+  logoutBtn.className =
+    'absolute top-2 right-4 text-xs md:text-sm lg:text-base font-bold px-3 py-2 rounded-xl ' +
+    'border-4 md:border-6 border-black bg-white hover:bg-black hover:text-white';
+  logoutBtn.textContent = 'Logout';
+  logoutBtn.addEventListener('click', () => {
+    try {
+      localStorage.removeItem('userName');
+      localStorage.removeItem('accessToken');
+    } catch (error) {
+      if (!(error instanceof Error)) {
+        showPopup({
+          title: 'An unknown error occurred during logout.',
+          message: 'Please try again.',
+          icon: 'error',
+        });
+        throw error;
+      }
+    }
+    window.location.href = BASE + 'login';
+  });
 
   top.appendChild(logo);
+  top.appendChild(logoutBtn);
   headerContent.appendChild(top);
 
   const nav = document.createElement('nav');
@@ -36,7 +60,7 @@ export function Header(currentPage: HeaderProps): HTMLElement {
 
   const feedLink = LinkButton({
     label: 'Feed',
-    href: BASE, // home
+    href: BASE,
     size: 'large',
     fill: currentPage === 'feed',
   });
