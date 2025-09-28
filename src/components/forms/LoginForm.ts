@@ -2,6 +2,7 @@ import { TextInput } from './inputs/TextInput';
 import { Button } from '../ui/Buttons';
 import { login } from '../../api/authService';
 import { showPopup } from '../ui/Popups';
+const BASE = import.meta.env.BASE_URL;
 
 /**
  * Handles the login form submission
@@ -17,7 +18,7 @@ export async function handleLoginFormSubmit(event: Event) {
   try {
     const response = await login({ email: email, password: password });
     if (response && response.data && response.data.accessToken) {
-      window.location.href = '/';
+      window.location.href = BASE;
     }
   } catch (error) {
     const errorMessage =
@@ -38,8 +39,7 @@ export function renderLoginForm() {
   formTitle.className = 'text-4xl lg:text-6xl font-extrabold self-center';
 
   const formDescription = document.createElement('p');
-  formDescription.innerHTML =
-    'Do you have an account? Register <a href="/register" class="underline">here</a>.';
+  formDescription.innerHTML = `Do you have an account? Register <a href="${BASE}register" class="underline">here</a>.`;
   formDescription.className = 'text-lg font-body self-center';
 
   const form = document.createElement('form');

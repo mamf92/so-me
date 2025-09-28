@@ -4,6 +4,7 @@ import { Button } from '../ui/Buttons';
 import type { Post } from '../../api/postsService';
 import { updatePost } from '../../api/postsService';
 import { showPopup } from '../ui/Popups';
+const BASE = import.meta.env.BASE_URL;
 
 /**
  * Handles the login form submission
@@ -39,7 +40,7 @@ export async function handleEditPostFormSubmit(event: Event, postId: number) {
         icon: 'success',
       });
       setTimeout(() => {
-        window.location.href = `/post?id=${response.data.id}`;
+        window.location.href = BASE + `post?id=${response.data.id}`;
       }, 2000);
     }
   } catch (error) {

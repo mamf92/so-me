@@ -2,6 +2,7 @@ import { TextInput } from './inputs/TextInput';
 import { Button } from '../ui/Buttons';
 import { register } from '../../api/authService';
 import { showPopup } from '../ui/Popups';
+const BASE = import.meta.env.BASE_URL;
 
 export async function handleRegistrationFormSubmit(event: Event) {
   event.preventDefault();
@@ -21,7 +22,7 @@ export async function handleRegistrationFormSubmit(event: Event) {
         icon: 'success',
       });
       setTimeout(() => {
-        window.location.href = '/login';
+        window.location.href = BASE + 'login';
       }, 2000);
     }
   } catch (error) {
@@ -45,8 +46,7 @@ export function renderRegistrationForm() {
   formTitle.className = 'text-4xl lg:text-6xl font-extrabold self-center';
 
   const formDescription = document.createElement('p');
-  formDescription.innerHTML =
-    'Already have an account? Login <a href="/login" class="underline">here</a>.';
+  formDescription.innerHTML = `Already have an account? Login <a href="${BASE}login" class="underline">here</a>.`;
   formDescription.className = 'text-lg font-body self-center';
 
   const form = document.createElement('form');

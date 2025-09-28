@@ -2,6 +2,7 @@ import type { Post } from '../../api/postsService';
 import { renderPostCard } from '../ui/PostCard';
 import { requestConfirmation } from '../ui/Popups';
 import { Button } from '../ui/Buttons';
+const BASE = import.meta.env.BASE_URL;
 
 type CurrentFeed = 'newest' | 'following';
 
@@ -28,7 +29,7 @@ export function renderFeedSection({
       size: 'medium',
       fill: currentPage === 'newest',
       onClick: () => {
-        window.location.href = '/';
+        window.location.href = BASE;
       },
     })
   );
@@ -38,7 +39,7 @@ export function renderFeedSection({
       size: 'medium',
       fill: currentPage === 'following',
       onClick: () => {
-        window.location.href = '/followingfeed';
+        window.location.href = BASE + 'followingfeed';
       },
     })
   );
@@ -48,7 +49,7 @@ export function renderFeedSection({
       size: 'medium',
       fill: false,
       onClick: () => {
-        window.location.href = '/create';
+        window.location.href = BASE + 'create';
       },
     })
   );
@@ -63,7 +64,7 @@ export function renderFeedSection({
       cancellationLabel: 'Later',
     }).then((confirmed) => {
       if (confirmed) {
-        window.location.href = '/explore';
+        window.location.href = BASE + 'explore';
       }
     });
     const emptyFeedMessage = document.createElement('img');
@@ -83,7 +84,7 @@ export function renderFeedSection({
     const isFollowing = authorName !== '' && followingSet.has(authorName);
     const postCard = renderPostCard(post, isFollowing);
     postCard.addEventListener('click', () => {
-      window.location.href = `/post?id=${post.id}`;
+      window.location.href = BASE + `post?id=${post.id}`;
     });
     feedContainer.appendChild(postCard);
   });

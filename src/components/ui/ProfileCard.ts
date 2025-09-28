@@ -1,4 +1,5 @@
 import { type Profile } from '../../api/profilesService';
+const BASE = import.meta.env.BASE_URL;
 
 export function renderProfileCard(profile: Profile): HTMLElement {
   if (!profile) {
@@ -10,7 +11,7 @@ export function renderProfileCard(profile: Profile): HTMLElement {
   profileCard.className =
     'profile-card flex flex-col w-[calc(100%-2rem)] sm:max-w-[42.5rem] justify-center items-center sm:flex-row lg:max-h-[8rem] rounded-2xl border-8 border-black overflow-hidden hover:cursor-pointer';
   profileCard.addEventListener('click', () => {
-    window.location.href = `/profile?name=${profile.name}`;
+    window.location.href = BASE + `profile?name=${profile.name}`;
   });
   if (profile.avatar) {
     const avatarContainer = document.createElement('div');

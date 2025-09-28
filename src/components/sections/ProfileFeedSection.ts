@@ -1,6 +1,7 @@
 import type { Post } from '../../api/postsService';
 import { renderPostCard } from '../ui/PostCard';
 import { requestConfirmation } from '../ui/Popups';
+const BASE = import.meta.env.BASE_URL;
 
 export function renderProfileFeedSection(posts: Post[]): HTMLElement {
   const profileFeedContainer = document.createElement('section');
@@ -17,7 +18,7 @@ export function renderProfileFeedSection(posts: Post[]): HTMLElement {
       cancellationLabel: 'Close',
     }).then((confirmed) => {
       if (confirmed) {
-        window.location.href = '/explore';
+        window.location.href = BASE + 'explore';
       }
     });
     const emptyFeedMessage = document.createElement('img');
@@ -33,7 +34,7 @@ export function renderProfileFeedSection(posts: Post[]): HTMLElement {
   posts.forEach((post) => {
     const postCard = renderPostCard(post);
     postCard.addEventListener('click', () => {
-      window.location.href = `/post?id=${post.id}`;
+      window.location.href = BASE + `post?id=${post.id}`;
     });
     profileFeedContainer.appendChild(postCard);
   });
