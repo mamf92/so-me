@@ -6,6 +6,7 @@ import { renderProfileCard } from '../components/ui/ProfileCard';
 import { showPageSpinner, hidePageSpinner } from '../components/ui/Spinners';
 import { showPopup } from '../components/ui/Popups';
 import { renderProfileFeedSection } from '../components/sections/ProfileFeedSection';
+const BASE = import.meta.env.BASE_URL;
 
 function getProfileNameFromURL(): string {
   const queryString = window.location.search;
@@ -19,7 +20,7 @@ function getProfileNameFromURL(): string {
       icon: 'warning',
     });
     setTimeout(() => {
-      window.location.href = '/explore';
+      window.location.href = BASE + 'explore';
     }, 3000);
     throw new Error('Profile name is missing in URL');
   }
@@ -73,7 +74,7 @@ export async function renderProfilePage() {
       icon: 'warning',
     });
     setTimeout(() => {
-      window.location.href = '/login';
+      window.location.href = BASE + 'login';
     }, 3000);
     return;
   }

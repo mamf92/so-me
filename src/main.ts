@@ -4,6 +4,8 @@ import { routes } from './router/routes';
 import { Header } from './components/layout/Header';
 import type { HeaderProps } from './components/layout/Header';
 
+const BASE = import.meta.env.BASE_URL;
+
 /**
  * Main application initialization.
  * Sets up the header and the router for handling navigation.
@@ -18,7 +20,11 @@ export function App() {
     throw new Error('Required DOM elements not found');
   }
 
-  const currentPage = checkCurrentPage(window.location.pathname);
+  const rawPath = window.location.pathname;
+  const strippedPath = rawPath.startsWith(BASE)
+    ? rawPath.slice(BASE.length - 1) || '/'
+    : rawPath;
+  const currentPage = checkCurrentPage(strippedPath);
 
   // Render the header
   headerContainer.innerHTML = '';
@@ -65,6 +71,7 @@ function setupNavigation(router: Router) {
     if (link && link.href.startsWith(window.location.origin)) {
       event.preventDefault();
       const url = new URL(link.href);
+      if (!url.pathname.startsWith(BASE)) return;
       const pathWithSearch = url.pathname + url.search;
       router.navigate(pathWithSearch);
     }

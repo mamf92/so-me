@@ -3,6 +3,7 @@ import { requestConfirmation } from '../ui/Popups';
 import { LinkButton, Button } from '../ui/Buttons';
 import { renderPostCard } from '../ui/PostCard';
 import { renderPostCardWithEditActions } from '../ui/PostCardWithEditActions';
+const BASE = import.meta.env.BASE_URL;
 
 export type CurrentFeed = 'newest' | 'following';
 
@@ -54,7 +55,7 @@ export function renderMyPostsSection({
       size: 'medium',
       fill: false,
       onClick: () => {
-        window.location.href = '/create';
+        window.location.href = BASE + 'create';
       },
     })
   );
@@ -69,7 +70,7 @@ export function renderMyPostsSection({
       cancellationLabel: 'Later',
     }).then((confirmed) => {
       if (confirmed) {
-        window.location.href = '/create';
+        window.location.href = BASE + 'create';
       }
     });
     const noPostsMessage = document.createElement('div');
@@ -87,7 +88,7 @@ export function renderMyPostsSection({
     noPostsMessage.appendChild(noPostsImage);
     const createPostLink = LinkButton({
       label: 'Create Post',
-      href: '/create',
+      href: BASE + 'create',
       size: 'large',
       fill: false,
     });
@@ -105,7 +106,7 @@ export function renderMyPostsSection({
       cancellationLabel: 'Later',
     }).then((confirmed) => {
       if (confirmed) {
-        window.location.href = '/explore';
+        window.location.href = BASE + 'explore';
       }
     });
     const noPostsImage = document.createElement('img');

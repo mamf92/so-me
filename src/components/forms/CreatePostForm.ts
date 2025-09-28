@@ -3,6 +3,7 @@ import { TextArea } from './inputs/TextArea';
 import { Button } from '../ui/Buttons';
 import { createPost } from '../../api/postsService';
 import { showPopup } from '../ui/Popups';
+const BASE = import.meta.env.BASE_URL;
 
 /**
  * Handles the login form submission
@@ -37,7 +38,7 @@ export async function handleCreatePostFormSubmit(event: Event) {
         icon: 'success',
       });
       setTimeout(() => {
-        window.location.href = `/post?id=${response.data.id}`;
+        window.location.href = BASE + `post?id=${response.data.id}`;
       }, 2000);
     }
   } catch (error) {

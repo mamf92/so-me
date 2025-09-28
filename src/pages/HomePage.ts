@@ -3,9 +3,9 @@ import { getPosts } from '../api/postsService';
 import { renderFeedSection } from '../components/sections/FeedSection';
 import { showPageSpinner, hidePageSpinner } from '../components/ui/Spinners';
 import { showPopup } from '../components/ui/Popups';
-import type { PaginationProps } from '../api/postsService';
-import type { PostsResponse } from '../api/postsService';
+import type { PaginationProps, PostsResponse } from '../api/postsService';
 import { getFollowingNames } from '../api/profilesService';
+const BASE = import.meta.env.BASE_URL;
 
 async function getPostsForFeed({
   page = 1,
@@ -35,7 +35,7 @@ export async function renderHomePage() {
       icon: 'warning',
     });
     setTimeout(() => {
-      window.location.href = '/login';
+      window.location.href = BASE + 'login';
     }, 3000);
     return;
   }

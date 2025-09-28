@@ -8,6 +8,7 @@ import { getFollowingNames } from '../api/profilesService';
 import { renderFeedSection } from '../components/sections/FeedSection';
 import { showPageSpinner, hidePageSpinner } from '../components/ui/Spinners';
 import { showPopup } from '../components/ui/Popups';
+const BASE = import.meta.env.BASE_URL;
 
 async function getFollowedPostsForFollowingFeed({
   page = 1,
@@ -37,7 +38,7 @@ export async function renderHomePageWithFollowingFeed() {
       icon: 'warning',
     });
     setTimeout(() => {
-      window.location.href = '/login';
+      window.location.href = BASE + 'login';
     }, 3000);
     return;
   }

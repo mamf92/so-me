@@ -3,6 +3,7 @@ import { LinkButton } from './Buttons';
 import { Button } from './Buttons';
 import { requestConfirmation } from './Popups';
 import { deletePost } from '../../api/postsService';
+const BASE = import.meta.env.BASE_URL;
 
 /**
  * Creates the edit post form by displaying the post as values in the form.
@@ -111,14 +112,14 @@ export function renderPostCardWithEditActions(post: Post): HTMLElement {
   const editButton = LinkButton({
     label: 'Edit',
     size: 'xsmall',
-    href: `/edit?id=${post.id}`,
+    href: `${BASE}edit?id=${post.id}`,
   });
   actions.appendChild(editButton);
 
   const viewButton = LinkButton({
     label: 'View',
     size: 'xsmall',
-    href: `/post?id=${post.id}`,
+    href: `${BASE}post?id=${post.id}`,
   });
   actions.appendChild(viewButton);
 

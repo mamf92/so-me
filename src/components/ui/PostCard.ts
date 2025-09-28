@@ -1,6 +1,7 @@
 import type { Post } from '../../api/postsService';
 import { Button } from './Buttons';
 import { followProfile, unfollowProfile } from '../../api/profilesService';
+const BASE = import.meta.env.BASE_URL;
 
 export function renderPostCard(post: Post, isFollowing?: boolean): HTMLElement {
   if (!post) {
@@ -36,7 +37,7 @@ export function renderPostCard(post: Post, isFollowing?: boolean): HTMLElement {
   author.textContent = post.author?.name || 'Unknown Profile';
   author.addEventListener('click', (event) => {
     event.stopPropagation();
-    window.location.href = `/profile?name=${post.author?.name}`;
+    window.location.href = BASE + `profile?name=${post.author?.name}`;
   });
   authorContainer.appendChild(author);
   if (isFollowing !== undefined) {
