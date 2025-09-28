@@ -50,6 +50,7 @@ export async function renderHomePage() {
       getPostsForFeed({ page: 1, limit: 10 }),
       getFollowingNames(localStorage.getItem('userName') || ''),
     ]);
+
     if (posts && posts.data) {
       const feedSection = renderFeedSection({
         posts: posts.data,

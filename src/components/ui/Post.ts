@@ -1,5 +1,11 @@
 import type { SinglePostResponse } from '../../api/postsService';
 
+/**
+ * Renders a post component.
+ * @param post The post data to render
+ * @returns The rendered post element
+ */
+
 export function renderPost(post: SinglePostResponse): HTMLElement {
   if (!post) {
     const emptyState = document.createElement('div');
@@ -13,11 +19,11 @@ export function renderPost(post: SinglePostResponse): HTMLElement {
     emptyState.appendChild(emptyFeedMessage);
     return emptyState;
   }
-
+  // Main article container
   const article = document.createElement('article');
   article.className =
     'flex flex-col rounded-2xl border-8 lg:border-16 border-black w-[calc(100vw-2rem)] max-w-[42.5rem]';
-
+  // If media exists, create and append the media element
   if (post.data.media && post.data.media.url) {
     const media = document.createElement('div');
     media.className = 'flex flex-row max-h-[20rem]';
@@ -28,11 +34,11 @@ export function renderPost(post: SinglePostResponse): HTMLElement {
     media.appendChild(img);
     article.appendChild(media);
   }
-
+  // Content container
   const content = document.createElement('div');
   content.className = 'flex flex-col w-full gap-2 p-2 justify-center';
   article.appendChild(content);
-
+  // Header with author and meta information
   const header = document.createElement('div');
   header.className = 'flex flex-row w-full justify-between';
   content.appendChild(header);
@@ -72,6 +78,7 @@ export function renderPost(post: SinglePostResponse): HTMLElement {
   meta.appendChild(time);
   header.appendChild(meta);
 
+  // Title and body
   const title = document.createElement('h3');
   title.className = 'font-heading font-extrabold text-2xl lg:text-4xl';
   title.textContent = post.data.title;
@@ -83,6 +90,7 @@ export function renderPost(post: SinglePostResponse): HTMLElement {
   console.log('Post body:', post.data.body);
   content.appendChild(body);
 
+  // Tags rendering
   if (Array.isArray(post.data.tags) && post.data.tags.length > 0) {
     const tags = document.createElement('div');
     tags.className = 'flex flex-row gap-4 items-center';

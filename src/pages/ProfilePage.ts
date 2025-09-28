@@ -103,8 +103,12 @@ export async function renderProfilePage() {
   showPageSpinner();
   const postsResponse = await getPostsForProfileFeed({ name: profileName });
   if (postsResponse) {
-    console.log('Posts response:', postsResponse);
-    const feedSection = renderProfileFeedSection(postsResponse.data);
+    const feedSection = renderProfileFeedSection({
+      posts: postsResponse.data,
+      profileName,
+      initialPage: postsResponse.meta?.currentPage || 1,
+      limit: 10,
+    });
     feedContainer.appendChild(feedSection);
   }
   hidePageSpinner();
