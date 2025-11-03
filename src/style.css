@@ -27,13 +27,13 @@ p {
 @font-face {
   font-family: 'Sora';
   src: url('/src/assets/fonts/Sora.ttf') format('truetype');
-  font-weight: normal;
+  font-weight: 100 900;
   font-style: normal;
 }
 @font-face {
   font-family: 'Geist';
   src: url('/src/assets/fonts/Geist.ttf') format('truetype');
-  font-weight: normal;
+  font-weight: 100 900;
   font-style: normal;
 }
 
