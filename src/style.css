@@ -23,6 +23,20 @@ p {
   padding: 0;
 }
 
+/* Fonts */
+@font-face {
+  font-family: 'Sora';
+  src: url('/src/assets/fonts/Sora.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Geist';
+  src: url('/src/assets/fonts/Geist.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+
 /* Global Styles */
 @theme {
   --color-black: #0d0d0d;
