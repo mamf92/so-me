@@ -9,7 +9,11 @@ export async function handleRegistrationFormSubmit(event: Event) {
   const form = event.target as HTMLFormElement;
   const formData = new FormData(form);
   const unformattedName = formData.get('name') as string;
-  const name = unformattedName.trim().replace(/\s+/g, '_');
+  const name = unformattedName
+    .trim()
+    .replace(/\s+/g, '_')
+    .replace(/'/g, '')
+    .replace(/’/g, '');
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
@@ -39,11 +43,12 @@ export async function handleRegistrationFormSubmit(event: Event) {
 export function renderRegistrationForm() {
   const formContainer = document.createElement('div');
   formContainer.className =
-    'flex flex-col w-[90vw] bg-white px-4 py-5 lg:px-8 lg:py-6 rounded-3xl border-8 lg:border-16 border-black gap-8 lg:max-w-[42.5rem]';
+    'flex flex-col w-[90vw] bg-white px-4 py-5 lg:px-8 lg:py-6 rounded-3xl border-8 lg:border-16 border-black gap-8 md:max-w-[42.5rem]';
 
   const formTitle = document.createElement('h1');
   formTitle.innerText = 'Register account';
-  formTitle.className = 'text-4xl lg:text-6xl font-extrabold self-center';
+  formTitle.className =
+    'font-heading text-center text-4xl lg:text-6xl font-extrabold';
 
   const formDescription = document.createElement('p');
   formDescription.innerHTML = `Already have an account? Login <a href="${BASE}login" class="underline">here</a>.`;
@@ -59,10 +64,12 @@ export function renderRegistrationForm() {
     name: 'name',
     label: 'Name',
     type: 'text',
-    placeholder: 'Enter your name',
-    pattern: '^[a-zA-ZÀ-ÿ\s\-]{3,}+$',
+    placeholder: 'Enter full name',
+    pattern: `^[a-zA-ZÀ-ÿ\\-\\s'’]{3,}$`,
     required: true,
-    title: 'Enter your full name. Letters, spaces, and hyphens only.',
+    title:
+      'Enter your full name. Letters, spaces, hyphens, and apostrophes only.',
+    autocomplete: 'name',
   });
   nameInput.classList.add('w-full');
 
@@ -75,6 +82,7 @@ export function renderRegistrationForm() {
     pattern: '^[a-zA-Z0-9._%+\\-]+@stud\\.noroff\\.no$',
     required: true,
     title: 'EmailTitle',
+    autocomplete: 'email',
   });
   emailInput.classList.add('w-full');
 
@@ -87,6 +95,7 @@ export function renderRegistrationForm() {
     pattern: '^.{8,}$',
     required: true,
     title: 'PasswordTitle',
+    autocomplete: 'new-password',
   });
   passwordInput.classList.add('w-full');
 
