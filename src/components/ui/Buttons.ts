@@ -24,7 +24,7 @@ const SIZE_CLASSES: Record<ButtonSize, string> = {
 };
 
 const BASE =
-  'inline-block font-extrabold rounded-2xl border-6 md:border-8 border-black';
+  'inline-block font-extrabold rounded-2xl border-6 md:border-8 border-black focus:outline-[0.1875rem] focus:outline-orange-700 hover:cursor-pointer';
 
 export function buttonClassNames(
   size: ButtonSize = 'medium',
