@@ -25,7 +25,7 @@ export function renderFeedSection({
   const feedContainer = document.createElement('section');
   feedContainer.innerHTML = '';
   feedContainer.className =
-    'flex flex-col w-full gap-4 justify-center items-center max-w-[calc(100%-2rem)] lg:max-w-[42.5rem]';
+    'flex flex-col w-full gap-4 justify-center items-center max-w-[calc(100%-2rem)] md:max-w-[42.5rem]';
 
   const feedActions = document.createElement('div');
   feedActions.className = 'flex flex-row justify-between items-center w-full';
@@ -87,7 +87,7 @@ export function renderFeedSection({
 
   // Wrapper for post cards
   const postsWrapper = document.createElement('div');
-  postsWrapper.className = 'flex flex-col w-full gap-4';
+  postsWrapper.className = 'flex flex-col items-center w-full gap-4';
   feedContainer.appendChild(postsWrapper);
 
   // Render initial posts
@@ -96,9 +96,6 @@ export function renderFeedSection({
       const authorName = post.author?.name || '';
       const isFollowing = authorName !== '' && followingSet.has(authorName);
       const postCard = renderPostCard(post, isFollowing);
-      postCard.addEventListener('click', () => {
-        window.location.href = BASE + `post?id=${post.id}`;
-      });
       postsWrapper.appendChild(postCard);
     });
   }
