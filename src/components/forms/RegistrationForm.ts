@@ -51,7 +51,7 @@ export function renderRegistrationForm() {
     'font-heading text-center text-4xl lg:text-6xl font-extrabold';
 
   const formDescription = document.createElement('p');
-  formDescription.innerHTML = `Already have an account? Login <a href="${BASE}login" class="underline">here</a>.`;
+  formDescription.innerHTML = `Already have an account? Login <a href="${BASE}login" class="underline" tabindex="0">here</a>.`;
   formDescription.className = 'text-lg font-body self-center';
 
   const form = document.createElement('form');
