@@ -7,8 +7,15 @@
     <title>So Me!</title>
   </head>
   <body id="body">
+    <a
+      href="#main-container"
+      tabindex="0"
+      class="absolute top-0 left-0 z-50 -translate-y-full transform bg-black px-4 py-2 text-white transition focus:translate-y-0"
+    >
+      Skip to main content
+    </a>
     <header id="header-container"></header>
-    <main id="main-container"></main>
+    <main id="main-container" tabindex="-1"></main>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

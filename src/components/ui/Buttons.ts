@@ -45,6 +45,7 @@ export function Button({
 }: ButtonProps): HTMLButtonElement {
   const btn = document.createElement('button');
   btn.className = buttonClassNames(size, fill);
+  btn.tabIndex = 0;
   if (id) btn.id = id;
   btn.textContent = label;
   if (onClick) btn.addEventListener('click', onClick);
@@ -63,5 +64,7 @@ export function LinkButton({
   if (id) link.id = id;
   link.textContent = label;
   link.href = href;
+  link.tabIndex = 0;
+
   return link;
 }

@@ -1,4 +1,5 @@
 import { LinkButton } from '../ui/Buttons';
+import { Button } from '../ui/Buttons';
 import { showPopup } from '../ui/Popups';
 
 const BASE = import.meta.env.BASE_URL;
@@ -15,6 +16,7 @@ export function Header(currentPage: HeaderProps): HTMLElement {
 
   const logo = document.createElement('a');
   logo.href = BASE;
+  logo.tabIndex = 0;
   logo.className =
     'color-black font-heading text-3xl lg:text-6xl font-bold flex flex-row';
   logo.append('So Me');
@@ -32,12 +34,12 @@ export function Header(currentPage: HeaderProps): HTMLElement {
   const hideLogout = path === 'login' || path === 'register';
 
   if (!hideLogout) {
-    const logoutBtn = document.createElement('button');
-    logoutBtn.type = 'button';
-    logoutBtn.className =
-      'absolute top-2 right-4 text-xs md:text-sm lg:text-base font-bold px-3 py-2 rounded-xl ' +
-      'border-4 md:border-6 border-black bg-white hover:bg-black hover:text-white';
-    logoutBtn.textContent = 'Logout';
+    const logoutBtn = Button({
+      label: 'Logout',
+      size: 'medium',
+      fill: false,
+    });
+    logoutBtn.classList.add('absolute', 'top-2', 'right-4');
     logoutBtn.addEventListener('click', () => {
       try {
         localStorage.removeItem('userName');
