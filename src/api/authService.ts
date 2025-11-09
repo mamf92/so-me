@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import { post } from './apiClient';
 import type { Media } from './postsService';
 import { showPopup } from '../components/ui/Popups';

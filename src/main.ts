@@ -75,8 +75,19 @@ function setupNavigation(router: Router) {
     const link = target.closest('a[href]') as HTMLAnchorElement;
     // Only handle internal links
     if (link && link.href.startsWith(window.location.origin)) {
-      event.preventDefault();
       const url = new URL(link.href);
+
+      if (url.hash && url.pathname === window.location.pathname) {
+        event.preventDefault();
+        const targetElement = document.querySelector(url.hash);
+        if (targetElement instanceof HTMLElement) {
+          targetElement.focus();
+          targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        return;
+      }
+
+      event.preventDefault();
       if (!url.pathname.startsWith(BASE)) return;
       const pathWithSearch = url.pathname + url.search;
       router.navigate(pathWithSearch);

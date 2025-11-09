@@ -10,6 +10,7 @@ interface TextInputProps {
   minLength?: number;
   maxLength?: number;
   title?: TitleVariants | string;
+  autocomplete?: AutoFill;
 }
 
 type TitleVariants = 'PasswordTitle' | 'EmailTitle';
@@ -31,6 +32,7 @@ export function TextInput({
   pattern,
   minLength,
   maxLength,
+  autocomplete,
 }: TextInputProps): HTMLElement {
   const container = document.createElement('div');
   container.className = 'flex flex-col w-full justify-start gap-2';
@@ -53,11 +55,51 @@ export function TextInput({
   inputField.title = title
     ? (TITLE_VARIANTS[title as TitleVariants] ?? (title as string))
     : '';
+  inputField.autocomplete = autocomplete ?? 'on';
   inputField.className =
-    'flex flex-row p-2 bg-white rounded-lg outline-[0.1875rem] outline-black justify-start items-center font-body text-sm';
+    'flex flex-row p-2 bg-white rounded-lg outline-[0.1875rem] outline-black focus:outline-[0.4rem] justify-start items-center font-body text-sm';
+
+  const helperText = document.createElement('span');
+  helperText.className = 'text-xs font-body text-orange-800 hidden';
+
+  let hasInteracted = false;
+
+  const updateValidationStyles = () => {
+    if (inputField.validity.valid) {
+      helperText.classList.add('hidden');
+      inputField.classList.remove('outline-orange-600');
+      inputField.classList.add('outline-green-600');
+      inputField.classList.add('outline-[0.4rem]');
+      inputField.classList.remove('outline-[0.1875rem]');
+    } else {
+      helperText.classList.remove('hidden');
+      inputField.classList.remove('outline-green-600');
+      inputField.classList.add('outline-orange-600');
+      inputField.classList.add('outline-[0.4rem]');
+      inputField.classList.remove('outline-[0.1875rem]');
+    }
+  };
+
+  inputField.addEventListener('input', () => {
+    hasInteracted = true;
+    updateValidationStyles();
+  });
+
+  inputField.addEventListener('change', () => {
+    hasInteracted = true;
+    updateValidationStyles();
+  });
+
+  inputField.addEventListener('blur', () => {
+    if (hasInteracted && !inputField.validity.valid) {
+      helperText.classList.remove('hidden');
+      helperText.textContent = inputField.title;
+    }
+  });
 
   container.appendChild(inputLabel);
   container.appendChild(inputField);
+  container.appendChild(helperText);
 
   return container;
 }

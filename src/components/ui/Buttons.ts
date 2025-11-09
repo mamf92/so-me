@@ -24,7 +24,7 @@ const SIZE_CLASSES: Record<ButtonSize, string> = {
 };
 
 const BASE =
-  'inline-block font-extrabold rounded-2xl border-6 md:border-8 border-black';
+  'inline-block font-extrabold rounded-2xl border-6 md:border-8 border-black focus:outline-[0.1875rem] focus:outline-orange-700 hover:cursor-pointer';
 
 export function buttonClassNames(
   size: ButtonSize = 'medium',
@@ -45,6 +45,7 @@ export function Button({
 }: ButtonProps): HTMLButtonElement {
   const btn = document.createElement('button');
   btn.className = buttonClassNames(size, fill);
+  btn.tabIndex = 0;
   if (id) btn.id = id;
   btn.textContent = label;
   if (onClick) btn.addEventListener('click', onClick);
@@ -63,5 +64,7 @@ export function LinkButton({
   if (id) link.id = id;
   link.textContent = label;
   link.href = href;
+  link.tabIndex = 0;
+
   return link;
 }
