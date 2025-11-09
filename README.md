@@ -33,16 +33,14 @@ The project brief for the CSS Frameworks Course Assignment was to style three pa
 
 ## ⚙️ Built With
 
-**Frontend:**
-
-- [HTML5](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5) ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)
-- [CSS3](https://developer.mozilla.org/en-US/docs/Web/CSS) ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)
-- [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
+- [Vite](https://vitejs.dev/) ![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=Vite&logoColor=white) – Build tool and dev server
 - [TypeScript](https://www.typescriptlang.org/) ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
-- [VS Code](https://code.visualstudio.com/) ![VS Code](https://img.shields.io/badge/VSCode-007ACC?style=flat&logo=visualstudiocode&logoColor=white)
+- [Tailwind CSS](https://tailwindcss.com/) ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-grey?style=flat&logo=tailwind-css&logoColor=38B2AC)
+- [Noroff Social Media API](https://docs.noroff.dev/docs/v2) – Backend API
 
-**Project Management:**
+**Project Tools:**
 
+- VS Code
 - Figma for design and prototyping
 - GitHub Projects for planning and project management
 
@@ -106,6 +104,15 @@ npm run build
 
 ```bash
 npm run preview
+```
+
+### Code Quality
+
+To run ESLint and format code using Prettier:
+
+```bash
+npm run lint
+npm run format
 ```
 
 ### 🌐 Live Demo
