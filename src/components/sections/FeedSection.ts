@@ -27,6 +27,11 @@ export function renderFeedSection({
   feedContainer.className =
     'flex flex-col w-full gap-4 justify-center items-center max-w-[calc(100%-2rem)] md:max-w-[42.5rem]';
 
+  const sectionHeading = document.createElement('h2');
+  sectionHeading.className = 'sr-only';
+  sectionHeading.textContent = 'Feed Section';
+  feedContainer.appendChild(sectionHeading);
+
   const feedActions = document.createElement('div');
   feedActions.className = 'flex flex-row justify-between items-center w-full';
   feedActions.appendChild(
