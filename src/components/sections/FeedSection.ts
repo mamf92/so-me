@@ -143,6 +143,7 @@ export function renderFeedSection({
             loadMoreButton.remove();
           }
         } catch (error) {
+          console.error('Failed to load more posts:', error);
           loadMoreButton.textContent = 'Load more';
           (loadMoreButton as HTMLButtonElement).disabled = false;
         } finally {

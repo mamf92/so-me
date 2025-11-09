@@ -140,6 +140,7 @@ export function renderPostCardWithEditActions(post: Post): HTMLElement {
             await deletePost(post.id);
             postCard.remove();
           } catch (error) {
+            console.error('Failed to delete the post:', error);
             alert('Failed to delete the post. Please try again.');
           }
         }
