@@ -44,6 +44,11 @@ export async function renderHomePage() {
   container.className =
     'flex flex-col items-center justify-center gap-8 mb-[10rem]';
 
+  const pageHeading = document.createElement('h1');
+  pageHeading.className = 'sr-only';
+  pageHeading.textContent = 'Home Page';
+  container.appendChild(pageHeading);
+
   showPageSpinner();
   try {
     const [posts, followingNames] = await Promise.all([

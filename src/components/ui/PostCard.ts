@@ -21,33 +21,39 @@ export function renderPostCard(post: Post, isFollowing?: boolean): HTMLElement {
   const postCard = document.createElement('article');
   postCard.className =
     'post-card flex flex-col w-[calc(100%-2rem)] max-w-[42.5rem] justify-center items-center lg:flex-row w-full lg:max-h-[10rem] rounded-2xl border-8 border-black overflow-hidden';
-  const media = document.createElement('div');
-  media.className =
-    'flex lg:h-40 lg:w-[calc(20%-1rem)] shrink-0 overflow-hidden';
+
   if (post.media) {
+    const mediaLink = document.createElement('a');
+    mediaLink.className =
+      'flex lg:h-40 lg:w-[calc(20%-1rem)] shrink-0 overflow-hidden focus:border-[0.4rem] focus:border-orange-700 hover:cursor-pointer';
+    mediaLink.href = BASE + `post?id=${post.id}`;
+    mediaLink.tabIndex = 0;
+    mediaLink.setAttribute('aria-label', `View post titled ${post.title}`);
+
     const img = document.createElement('img');
     img.src = post.media.url;
     img.alt = post.media.alt || post.title;
     img.className = 'lg:h-full lg:w-full object-cover hover:cursor-pointer';
-    media.appendChild(img);
+    mediaLink.appendChild(img);
+    postCard.appendChild(mediaLink);
   }
-  postCard.appendChild(media);
 
   const content = document.createElement('div');
   content.className = 'flex flex-col w-full gap-2 px-2 py-1 justify-center';
+  content.className = `flex flex-col w-full gap-2 px-2 py-1 justify-center ${post.media ? '' : 'sm:px-8'}`;
 
   const header = document.createElement('div');
   header.className = 'flex flex-row w-full justify-between';
 
   const authorContainer = document.createElement('div');
   authorContainer.className = 'flex flex-row gap-2 items-center';
-  const author = document.createElement('span');
-  author.className = 'font-body text-xs hover:underline hover:cursor-pointer';
+  const author = document.createElement('a');
+  author.className =
+    'font-body text-xs hover:underline focus:outline-orange-700';
+  author.tabIndex = 0;
+  author.href = BASE + `profile?name=${post.author?.name}`;
   author.textContent = post.author?.name || 'Unknown Profile';
-  author.addEventListener('click', (event) => {
-    event.stopPropagation();
-    window.location.href = BASE + `profile?name=${post.author?.name}`;
-  });
+
   authorContainer.appendChild(author);
 
   // If isFollowing is defined, show the follow/unfollow button
@@ -124,9 +130,15 @@ export function renderPostCard(post: Post, isFollowing?: boolean): HTMLElement {
   content.appendChild(header);
 
   const title = document.createElement('h3');
-  title.className =
-    'font-heading font-extrabold text-sm text-left hover:cursor-pointer';
-  title.textContent = post.title;
+  title.className = 'font-heading font-extrabold text-sm text-left';
+
+  const titleLink = document.createElement('a');
+  titleLink.className = ' focus:outline-orange-700';
+  titleLink.href = BASE + `post?id=${post.id}`;
+  titleLink.tabIndex = 0;
+  titleLink.setAttribute('aria-label', `View post titled ${post.title}`);
+  titleLink.textContent = post.title;
+  title.appendChild(titleLink);
   content.appendChild(title);
 
   const body = document.createElement('p');
